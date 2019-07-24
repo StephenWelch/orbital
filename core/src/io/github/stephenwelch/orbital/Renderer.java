@@ -1,6 +1,7 @@
 package io.github.stephenwelch.orbital;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -33,6 +34,14 @@ public class Renderer implements GameEntity {
 
     @Override
     public void update() {
+        float zoomInc = 0.025f;
+        if(Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
+            camera.zoom = Math.max(0.025f, camera.zoom - zoomInc);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
+            camera.zoom = Math.min(5.5f, camera.zoom + zoomInc);
+        }
+//        Gdx.app.debug("RENDERER", "Zoom: " + camera.zoom);
         camera.update();
         clear();
         renderList.forEach(this::render);

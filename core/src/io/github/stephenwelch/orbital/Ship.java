@@ -52,7 +52,6 @@ public class Ship implements Renderable, GameEntity {
 
     @Override
     public void update() {
-        Gdx.app.debug("SHIP", "Updating");
         float torque = 500.0f;
         float force = 500.0f;
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -77,7 +76,7 @@ public class Ship implements Renderable, GameEntity {
     @Override
     public void render(ShapeRenderer renderer) {
 //        Gdx.app.debug("SHIP", "Rendering ship");
-        Gdx.app.debug("SHIP", "Position: " + body.getPosition() + "\tAngle: " + body.getAngle());
+//        Gdx.app.debug("SHIP", "Position: " + body.getPosition() + "\tAngle: " + body.getAngle());
         Vector2[] translatedVertices = translate(body.getPosition(), body.getAngle(), vertices);
         renderer.triangle(translatedVertices[0].x, translatedVertices[0].y, translatedVertices[1].x, translatedVertices[1].y, translatedVertices[2].x, translatedVertices[2].y);
     }
