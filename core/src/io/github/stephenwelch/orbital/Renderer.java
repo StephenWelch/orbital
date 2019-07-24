@@ -70,6 +70,10 @@ public class Renderer implements GameEntity {
         }
     }
 
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+    }
+
     public OrthographicCamera getCamera() {
         return camera;
     }

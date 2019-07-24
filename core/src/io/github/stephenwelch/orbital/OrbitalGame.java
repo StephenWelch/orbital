@@ -32,7 +32,7 @@ public class OrbitalGame extends ApplicationAdapter {
 		Gdx.app.log("INIT", "Initializing Orbital...");
 
 		physicsManager.setRenderPhysics(false);
-		renderer.setAntialiasing(true);
+		renderer.setAntialiasing(false);
 		renderer.setRenderList(ship);
 
 		entities.add(renderer);
@@ -47,7 +47,13 @@ public class OrbitalGame extends ApplicationAdapter {
 //		Gdx.app.log("UPDATE", "Rendering Orbital");
 		entities.forEach(GameEntity::update);
 	}
-	
+
+	@Override
+	public void resize(int width, int height) {
+		// Just delegate to renderer
+		renderer.resize(width, height);
+	}
+
 	@Override
 	public void dispose () {
 		Gdx.app.log("SHUTDOWN", "Shutting down Orbital");
