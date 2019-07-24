@@ -1,15 +1,12 @@
 package io.github.stephenwelch.orbital;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,8 +17,10 @@ public class Renderer implements GameEntity {
     private ShapeRenderer renderer;
     private List<Renderable> renderList;
 
+    private boolean enableAntialiasing = false;
+
     public Renderer(Renderable ... renderables) {
-        renderList = Arrays.asList(renderables);
+        setRenderList(renderables);
     }
 
     @Override
@@ -63,11 +62,25 @@ public class Renderer implements GameEntity {
 
     public void clear() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (enableAntialiasing) {
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
+        } else {
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        }
     }
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public void setRenderList(Renderable ... renderList) {
+        this.renderList = Arrays.asList(renderList);
+    }
+
+    public Renderer setAntialiasing(boolean enabled) {
+        enableAntialiasing = enabled;
+        return this;
     }
 
 }
