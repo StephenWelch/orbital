@@ -3,9 +3,13 @@ package io.github.stephenwelch.orbital;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.List;
 
@@ -22,6 +26,9 @@ public class Ship implements Renderable, GameEntity {
 
     private Body body = null;
     private Fixture fixture = null;
+
+    private ParticleEffectPool thrustEffectPool;
+    private Array<ParticleEffectPool.PooledEffect> thrustEffects = new Array<>();
 
     public Ship(World world) {
         this.world = world;
@@ -48,6 +55,12 @@ public class Ship implements Renderable, GameEntity {
         fixture = body.createFixture(fixtureDef);
 
         shape.dispose();
+
+        ParticleEffect thrustEffect = new ParticleEffect();
+        thrustEffect.load(Gdx.files.internal("thrust_particle.p"), Gdx.files.internal("thrust_particle.png"));
+        thrustEffect.setEmittersCleanUpBlendFunction(false);
+
+        thrustEffectPool = new ParticleEffectPool(thrustEffect, 10, 10);
     }
 
     @Override
