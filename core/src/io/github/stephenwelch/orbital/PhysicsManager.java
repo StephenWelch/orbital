@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class PhysicsManager implements GameEntity {
 
+    private static PhysicsManager instance = new PhysicsManager(Renderer.getInstance().getCamera());
+
     private World world = new World(new Vector2(0, 0), true);
 
     private Box2DDebugRenderer debugRenderer;
@@ -43,6 +45,10 @@ public class PhysicsManager implements GameEntity {
 
     public World getWorld() {
         return world;
+    }
+
+    public static PhysicsManager getInstance() {
+        return instance;
     }
 
 }
