@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -29,7 +30,7 @@ public class Renderer implements GameEntity {
     private ShapeRenderer renderer;
     private Renderable[] renderList = new Renderable[0];
     private SpriteBatch effectSpriteBatch = null;
-    private List<RendererEffect> effectList = new ArrayList<>();
+    private List<EffectSubmitter> effectSubmitters = new ArrayList<>();
 
     private boolean enableAntialiasing = false;
 
@@ -80,12 +81,21 @@ public class Renderer implements GameEntity {
 
         effectSpriteBatch.setProjectionMatrix(camera.combined);
         effectSpriteBatch.begin();
-        effectList.forEach(effect -> {
-            effect.effect.draw(effectSpriteBatch, Gdx.graphics.getDeltaTime());
-            if(effect.effect.isComplete()) {
-                effect.dispose();
+        for(EffectSubmitter submitter : effectSubmitters) {
+            for(RendererEffect rendererEffect : submitter.getActiveParticleEffects()) {
+                ParticleEffectPool.PooledEffect effect = rendererEffect.effect;
+                // Updates and draws the effect
+                effect.draw(effectSpriteBatch, Gdx.graphics.getDeltaTime());
+                if(effect.isComplete()) {
+                    if(rendererEffect.reusable) {
+                        effect.reset();
+                    } else {
+                        effect.free();
+                    }
+                    submitter.removeParticleEffect(rendererEffect);
+                }
             }
-        });
+        }
         effectSpriteBatch.end();
 
     }
@@ -125,8 +135,8 @@ public class Renderer implements GameEntity {
         return this;
     }
 
-    public void addEffects(RendererEffect ... effects) {
-        this.effectList.addAll(Arrays.asList(effects));
+    public void registerEffectSubmitter(EffectSubmitter submitter) {
+        effectSubmitters.add(submitter);
     }
 
     // Adapted from: https://stackoverflow.com/questions/14839648/libgdx-particleeffect-rotation

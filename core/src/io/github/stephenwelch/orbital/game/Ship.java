@@ -9,14 +9,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import io.github.stephenwelch.orbital.engine.GameEntity;
-import io.github.stephenwelch.orbital.engine.Renderable;
-import io.github.stephenwelch.orbital.engine.Renderer;
-import io.github.stephenwelch.orbital.engine.RendererEffect;
+import io.github.stephenwelch.orbital.engine.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Ship implements Renderable, GameEntity {
+public class Ship implements Renderable, GameEntity, EffectSubmitter {
 
     private final Vector2[] vertices = new Vector2[] {
             new Vector2(0.0f, 5.9475f),
@@ -30,7 +28,7 @@ public class Ship implements Renderable, GameEntity {
     private Fixture fixture = null;
 
     private ParticleEffectPool thrustEffectPool;
-    private Array<ParticleEffectPool.PooledEffect> thrustEffects = new Array<>();
+    private List<RendererEffect> activeParticleEffects = new ArrayList<>();
 
     public Ship(World world) {
         this.world = world;
@@ -64,6 +62,7 @@ public class Ship implements Renderable, GameEntity {
         thrustEffect.setEmittersCleanUpBlendFunction(false);
 
         thrustEffectPool = new ParticleEffectPool(thrustEffect, 10, 10);
+        Renderer.getInstance().registerEffectSubmitter(this);
     }
 
     @Override
@@ -139,4 +138,13 @@ public class Ship implements Renderable, GameEntity {
         return new Vector2().add(vector).rotateRad(rotation).add(translation);
     }
 
+    @Override
+    public List<RendererEffect> getActiveParticleEffects() {
+        return activeParticleEffects;
+    }
+
+    @Override
+    public boolean removeParticleEffect(RendererEffect effectToRemove) {
+        return activeParticleEffects.remove(effectToRemove);
+    }
 }
