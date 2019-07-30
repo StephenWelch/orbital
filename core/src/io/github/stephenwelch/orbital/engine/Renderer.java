@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -76,6 +78,7 @@ public class Renderer implements GameEntity {
         }
         renderComponent(renderable);
 
+        effectSpriteBatch.setProjectionMatrix(camera.combined);
         effectSpriteBatch.begin();
         effectList.forEach(effect -> {
             effect.effect.draw(effectSpriteBatch, Gdx.graphics.getDeltaTime());
@@ -124,6 +127,18 @@ public class Renderer implements GameEntity {
 
     public void addEffects(RendererEffect ... effects) {
         this.effectList.addAll(Arrays.asList(effects));
+    }
+
+    // Adapted from: https://stackoverflow.com/questions/14839648/libgdx-particleeffect-rotation
+    public static void rotateParticleEffect(ParticleEffect effect, float degrees) {
+        for (ParticleEmitter emitter : effect.getEmitters()) {
+            ParticleEmitter.ScaledNumericValue val = emitter.getAngle();
+            float amplitude = (val.getHighMax() - val.getHighMin()) / 2f;
+            float h1 = degrees + amplitude;
+            float h2 = degrees - amplitude;
+            val.setHigh(h1, h2);
+            val.setLow(degrees);
+        }
     }
 
     public static Renderer getInstance() {

@@ -80,6 +80,8 @@ public class Ship implements Renderable, GameEntity {
             body.applyForceToCenter(force * (float)Math.cos(body.getAngle()), force * (float)Math.sin(body.getAngle()), true);
             ParticleEffectPool.PooledEffect e = thrustEffectPool.obtain();
             e.setPosition(getMainEngineThrustSourcePosition().x, getMainEngineThrustSourcePosition().y);
+            float angle = (float)Math.toDegrees(body.getAngle()) + 180.0f;
+            Renderer.rotateParticleEffect(e, angle);
             Renderer.getInstance().addEffects(new RendererEffect(e, true));
             e.start();
         }
