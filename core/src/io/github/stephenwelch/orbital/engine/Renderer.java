@@ -80,12 +80,7 @@ public class Renderer implements GameEntity {
         effectList.forEach(effect -> {
             effect.effect.draw(effectSpriteBatch, Gdx.graphics.getDeltaTime());
             if(effect.effect.isComplete()) {
-                if(effect.reusable) {
-                    effect.effect.reset();
-                } else {
-                    effect.effect.free();
-                    effectList.remove(effect);
-                }
+                effect.dispose();
             }
         });
         effectSpriteBatch.end();

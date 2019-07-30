@@ -12,4 +12,12 @@ public class RendererEffect {
         this.reusable = reusable;
     }
 
+    public void dispose() {
+        if(reusable) {
+            effect.reset();
+        } else {
+            effect.free();
+        }
+    }
+
 }
