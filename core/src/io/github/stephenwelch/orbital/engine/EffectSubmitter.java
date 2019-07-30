@@ -1,10 +1,11 @@
 package io.github.stephenwelch.orbital.engine;
 
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 public interface EffectSubmitter {
 
-    List<RendererEffect> getActiveParticleEffects();
+    BlockingQueue<RendererEffect> getActiveParticleEffects();
     boolean removeParticleEffect(RendererEffect effectToRemove);
 
 }

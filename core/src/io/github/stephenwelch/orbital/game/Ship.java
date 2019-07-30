@@ -13,6 +13,8 @@ import io.github.stephenwelch.orbital.engine.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class Ship implements Renderable, GameEntity, EffectSubmitter {
 
@@ -28,7 +30,7 @@ public class Ship implements Renderable, GameEntity, EffectSubmitter {
     private Fixture fixture = null;
 
     private ParticleEffectPool thrustEffectPool;
-    private List<RendererEffect> activeParticleEffects = new ArrayList<>();
+    private BlockingQueue<RendererEffect> activeParticleEffects = new ArrayBlockingQueue<>(10000);
 
     public Ship(World world) {
         this.world = world;
@@ -81,7 +83,7 @@ public class Ship implements Renderable, GameEntity, EffectSubmitter {
             e.setPosition(getMainEngineThrustSourcePosition().x, getMainEngineThrustSourcePosition().y);
             float angle = (float)Math.toDegrees(body.getAngle()) + 180.0f;
             Renderer.rotateParticleEffect(e, angle);
-            Renderer.getInstance().addEffects(new RendererEffect(e, true));
+            activeParticleEffects.add(new RendererEffect(e, true));
             e.start();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
@@ -139,7 +141,7 @@ public class Ship implements Renderable, GameEntity, EffectSubmitter {
     }
 
     @Override
-    public List<RendererEffect> getActiveParticleEffects() {
+    public BlockingQueue<RendererEffect> getActiveParticleEffects() {
         return activeParticleEffects;
     }
 
