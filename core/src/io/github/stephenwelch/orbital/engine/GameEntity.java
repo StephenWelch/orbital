@@ -1,4 +1,4 @@
-package io.github.stephenwelch.orbital;
+package io.github.stephenwelch.orbital.engine;
 
 public interface GameEntity {
 
