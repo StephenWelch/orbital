@@ -30,7 +30,7 @@ public class Renderer implements GameEntity {
     private ShapeRenderer renderer;
     private Renderable[] renderList = new Renderable[0];
     private SpriteBatch effectSpriteBatch = null;
-    private List<EffectSubmitter> effectSubmitters = new ArrayList<>();
+    private List<RendererEffect> activeParticleEffects = new ArrayList<>();
 
     private boolean enableAntialiasing = false;
 
@@ -49,7 +49,7 @@ public class Renderer implements GameEntity {
 
     @Override
     public void update() {
-        Gdx.app.debug("RENDERER", "Updating renderer: " + renderList);
+//        Gdx.app.debug("RENDERER", "Updating renderer: " + renderList);
         float zoomInc = 0.025f;
         if(Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
             camera.zoom = Math.max(0.025f, camera.zoom - zoomInc);
@@ -71,7 +71,7 @@ public class Renderer implements GameEntity {
     }
 
     private void render(Renderable renderable) {
-        Gdx.app.debug("RENDERER", "Running render");
+//        Gdx.app.debug("RENDERER", "Running render");
         if(renderable.getSubComponents() != null) {
             for(Renderable subComponent : renderable.getSubComponents()) {
                 render(subComponent);
@@ -81,19 +81,11 @@ public class Renderer implements GameEntity {
 
         effectSpriteBatch.setProjectionMatrix(camera.combined);
         effectSpriteBatch.begin();
-        for(EffectSubmitter submitter : effectSubmitters) {
-            for(RendererEffect rendererEffect : submitter.getActiveParticleEffects()) {
-                ParticleEffectPool.PooledEffect effect = rendererEffect.effect;
-                // Updates and draws the effect
-                effect.draw(effectSpriteBatch, Gdx.graphics.getDeltaTime());
-                if(effect.isComplete()) {
-                    if(rendererEffect.reusable) {
-                        effect.reset();
-                    } else {
-                        effect.free();
-                    }
-                    submitter.removeParticleEffect(rendererEffect);
-                }
+        for(RendererEffect rendererEffect : activeParticleEffects) {
+            // Updates and draws the effect
+            rendererEffect.render(effectSpriteBatch);
+            if(rendererEffect.effect.isComplete()) {
+                rendererEffect.dispose();
             }
         }
         effectSpriteBatch.end();
@@ -135,8 +127,12 @@ public class Renderer implements GameEntity {
         return this;
     }
 
-    public void registerEffectSubmitter(EffectSubmitter submitter) {
-        effectSubmitters.add(submitter);
+    public void registerParticleEffect(RendererEffect effect) {
+        activeParticleEffects.add(effect);
+    }
+
+    public void deregisterParticleEffect(RendererEffect effect) {
+        activeParticleEffects.remove(effect);
     }
 
     // Adapted from: https://stackoverflow.com/questions/14839648/libgdx-particleeffect-rotation

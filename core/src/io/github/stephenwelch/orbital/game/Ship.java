@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class Ship implements Renderable, GameEntity, EffectSubmitter {
+public class Ship implements Renderable, GameEntity {
 
     private final Vector2[] vertices = new Vector2[] {
             new Vector2(0.0f, 5.9475f),
@@ -29,8 +29,7 @@ public class Ship implements Renderable, GameEntity, EffectSubmitter {
     private Body body = null;
     private Fixture fixture = null;
 
-    private ParticleEffectPool thrustEffectPool;
-    private BlockingQueue<RendererEffect> activeParticleEffects = new ArrayBlockingQueue<>(10000);
+    private ShipParticleEffects particleEffects = new ShipParticleEffects();
 
     public Ship(World world) {
         this.world = world;
@@ -59,12 +58,8 @@ public class Ship implements Renderable, GameEntity, EffectSubmitter {
 
         shape.dispose();
 
-        ParticleEffect thrustEffect = new ParticleEffect();
-        thrustEffect.load(Gdx.files.internal("thrust_particle.p"), Gdx.files.internal(""));
-        thrustEffect.setEmittersCleanUpBlendFunction(false);
-
-        thrustEffectPool = new ParticleEffectPool(thrustEffect, 10, 10);
-        Renderer.getInstance().registerEffectSubmitter(this);
+        particleEffects.create();
+        Renderer.getInstance().registerParticleEffect(particleEffects.mainEngineThrust);
     }
 
     @Override
@@ -79,12 +74,13 @@ public class Ship implements Renderable, GameEntity, EffectSubmitter {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             body.applyForceToCenter(force * (float)Math.cos(body.getAngle()), force * (float)Math.sin(body.getAngle()), true);
-            ParticleEffectPool.PooledEffect e = thrustEffectPool.obtain();
-            e.setPosition(getMainEngineThrustSourcePosition().x, getMainEngineThrustSourcePosition().y);
+
+            particleEffects.mainEngineThrust.effect.setPosition(getMainEngineThrustSourcePosition().x, getMainEngineThrustSourcePosition().y);
             float angle = (float)Math.toDegrees(body.getAngle()) + 180.0f;
-            Renderer.rotateParticleEffect(e, angle);
-            activeParticleEffects.add(new RendererEffect(e, true));
-            e.start();
+            Renderer.rotateParticleEffect(particleEffects.mainEngineThrust.effect, angle);
+            particleEffects.mainEngineThrust.start();
+        } else {
+            particleEffects.mainEngineThrust.stop();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             body.applyForceToCenter(-force * (float)Math.cos(body.getAngle()), -force * (float)Math.sin(body.getAngle()), true);
@@ -98,7 +94,7 @@ public class Ship implements Renderable, GameEntity, EffectSubmitter {
 
     @Override
     public void render(ShapeRenderer renderer) {
-        Gdx.app.debug("SHIP", "Rendering ship");
+//        Gdx.app.debug("SHIP", "Rendering ship");
 //        Gdx.app.debug("SHIP", "Position: " + body.getPosition() + "\tAngle: " + body.getAngle());
         Vector2[] translatedVertices = getVertexPositions();
         renderer.triangle(translatedVertices[0].x, translatedVertices[0].y, translatedVertices[1].x, translatedVertices[1].y, translatedVertices[2].x, translatedVertices[2].y);
@@ -140,13 +136,4 @@ public class Ship implements Renderable, GameEntity, EffectSubmitter {
         return new Vector2().add(vector).rotateRad(rotation).add(translation);
     }
 
-    @Override
-    public BlockingQueue<RendererEffect> getActiveParticleEffects() {
-        return activeParticleEffects;
-    }
-
-    @Override
-    public boolean removeParticleEffect(RendererEffect effectToRemove) {
-        return activeParticleEffects.remove(effectToRemove);
-    }
 }
