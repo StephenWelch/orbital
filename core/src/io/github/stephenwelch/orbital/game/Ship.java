@@ -66,7 +66,7 @@ public class Ship implements Renderable, GameEntity {
 
         shape.dispose();
 
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         // Add all particles to the same pool
         particleEffects.addParticlesToPool("particles/thrust_particle.p", ShipParticleEffects.values());
 
