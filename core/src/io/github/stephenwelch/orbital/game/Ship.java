@@ -7,10 +7,18 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
+import io.github.stephenwelch.orbital.Util;
 import io.github.stephenwelch.orbital.engine.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -23,7 +31,7 @@ public class Ship implements Renderable, GameEntity {
             new Vector2(0.0f, -5.9475f),
             new Vector2(9.3092f, 0.0f)
     };
-    private final Vector2 mainEngineThrustSource = new Vector2((vertices[0].x + vertices[1].x) / 2.0f, (vertices[0].y + vertices[1].y) / 2.0f);
+    private final Vector3 mainEngineThrustSource = new Vector3((vertices[0].x + vertices[1].x) / 2.0f, (vertices[0].y + vertices[1].y) / 2.0f, 180.0f);
     private final World world;
 
     private Body body = null;
@@ -60,6 +68,18 @@ public class Ship implements Renderable, GameEntity {
 
         particleEffects.create();
         Renderer.getInstance().registerParticleEffect(particleEffects.mainEngineThrust);
+
+        Gson gson = new Gson();
+        EntityDefinition def = new EntityDefinition();
+        def.particleFilePositionMap.put("thrust_particle.p", mainEngineThrustSource);
+        String json = gson.toJson(def);
+        try {
+            FileWriter jsonWriter = new FileWriter(new File("ship.ppm"));
+            jsonWriter.append(json);
+            jsonWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -76,7 +96,7 @@ public class Ship implements Renderable, GameEntity {
             body.applyForceToCenter(force * (float)Math.cos(body.getAngle()), force * (float)Math.sin(body.getAngle()), true);
 
             particleEffects.mainEngineThrust.effect.setPosition(getMainEngineThrustSourcePosition().x, getMainEngineThrustSourcePosition().y);
-            float angle = (float)Math.toDegrees(body.getAngle()) + 180.0f;
+            float angle = (float)Math.toDegrees(body.getAngle()) + mainEngineThrustSource.z;
             Renderer.rotateParticleEffect(particleEffects.mainEngineThrust.effect, angle);
             particleEffects.mainEngineThrust.start();
         } else {
@@ -120,7 +140,7 @@ public class Ship implements Renderable, GameEntity {
     }
 
     private Vector2 getMainEngineThrustSourcePosition() {
-        return translate(body.getPosition(), body.getAngle(), mainEngineThrustSource);
+        return translate(body.getPosition(), body.getAngle(), Util.truncateVector(mainEngineThrustSource));
     }
 
     public Vector2[] translate(Vector2 translation, float rotation, Vector2 ... vectors) {
