@@ -20,7 +20,7 @@ public class ShipParticleEffects implements ParticleEffectContainer {
     @Override
     public void create() {
         ParticleEffect thrustEffect = new ParticleEffect();
-        thrustEffect.load(Gdx.files.internal("thrust_particle.p"), Gdx.files.internal(""));
+        thrustEffect.load(Gdx.files.internal("particles/thrust_particle.p"), Gdx.files.internal("particles/"));
         thrustEffect.setEmittersCleanUpBlendFunction(false);
 
         thrustEffectPool = new ParticleEffectPool(thrustEffect, 10, 10);

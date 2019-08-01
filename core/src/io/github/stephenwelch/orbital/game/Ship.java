@@ -3,26 +3,19 @@ package io.github.stephenwelch.orbital.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonWriter;
+import com.google.gson.GsonBuilder;
 import io.github.stephenwelch.orbital.Util;
 import io.github.stephenwelch.orbital.engine.*;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 public class Ship implements Renderable, GameEntity {
 
@@ -37,7 +30,14 @@ public class Ship implements Renderable, GameEntity {
     private Body body = null;
     private Fixture fixture = null;
 
-    private ShipParticleEffects particleEffects = new ShipParticleEffects();
+    private ParticleEffectsDef<ShipParticleEffects> particleEffects = new ParticleEffectsDef<>();
+
+    private enum ShipParticleEffects {
+        MAIN_ENGINE,
+        LEFT_FORWARD_THRUSTER, RIGHT_FORWARD_THRUSTER,
+        LEFT_BACK_THRUSTER, RIGHT_BACK_THRUSTER,
+        LEFT_RETRO, RIGHT_RETRO;
+    }
 
     public Ship(World world) {
         this.world = world;
@@ -66,13 +66,11 @@ public class Ship implements Renderable, GameEntity {
 
         shape.dispose();
 
-        particleEffects.create();
-        Renderer.getInstance().registerParticleEffect(particleEffects.mainEngineThrust);
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        // Add all particles to the same pool
+        particleEffects.addParticlesToPool("particles/thrust_particle.p", ShipParticleEffects.values());
 
-        Gson gson = new Gson();
-        EntityDefinition def = new EntityDefinition();
-        def.particleFilePositionMap.put("thrust_particle.p", mainEngineThrustSource);
-        String json = gson.toJson(def);
+        String json = gson.toJson(particleEffects);
         try {
             FileWriter jsonWriter = new FileWriter(new File("ship.ppm"));
             jsonWriter.append(json);
@@ -80,6 +78,9 @@ public class Ship implements Renderable, GameEntity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        particleEffects.create();
+        Renderer.getInstance().registerParticleEffect(particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE));
     }
 
     @Override
@@ -95,12 +96,14 @@ public class Ship implements Renderable, GameEntity {
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             body.applyForceToCenter(force * (float)Math.cos(body.getAngle()), force * (float)Math.sin(body.getAngle()), true);
 
-            particleEffects.mainEngineThrust.effect.setPosition(getMainEngineThrustSourcePosition().x, getMainEngineThrustSourcePosition().y);
+            RendererEffect mainEngineThrust = particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE);
+            mainEngineThrust.effect.setPosition(getMainEngineThrustSourcePosition().x, getMainEngineThrustSourcePosition().y);
             float angle = (float)Math.toDegrees(body.getAngle()) + mainEngineThrustSource.z;
-            Renderer.rotateParticleEffect(particleEffects.mainEngineThrust.effect, angle);
-            particleEffects.mainEngineThrust.start();
+            Renderer.rotateParticleEffect(mainEngineThrust.effect, angle);
+            mainEngineThrust.start();
         } else {
-            particleEffects.mainEngineThrust.stop();
+            RendererEffect mainEngineThrust = particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE);
+            mainEngineThrust.stop();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             body.applyForceToCenter(-force * (float)Math.cos(body.getAngle()), -force * (float)Math.sin(body.getAngle()), true);
