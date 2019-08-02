@@ -8,16 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 import io.github.stephenwelch.orbital.Util;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 public class ParticleEffectsDef<E extends Enum> {
 
@@ -63,6 +59,15 @@ public class ParticleEffectsDef<E extends Enum> {
 
     public RendererEffect getEffect(E particleName) {
         return particleNameEffectMap.get(particleName);
+    }
+    public Vector3 getEffectPosition(E particleName) {
+        return particleNamePosition.get(particleName);
+    }
+    public Vector3 getAdjustedEffectPosition(E particleName, Vector3 adjustment) {
+        Vector3 effectPosition = getEffectPosition(particleName);
+        Vector2 newPosition = Util.translateAndRotate(Util.truncateVector(adjustment), adjustment.z, Util.truncateVector(effectPosition));
+        float newAngle = adjustment.z + effectPosition.z;
+        return new Vector3(newPosition.x, newPosition.y, newAngle);
     }
 
     public void saveToJson(FileHandle fileHandle) {

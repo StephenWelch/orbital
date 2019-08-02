@@ -1,6 +1,5 @@
 package io.github.stephenwelch.orbital;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -8,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.util.stream.Collectors;
 
 public class Util {
@@ -41,6 +39,25 @@ public class Util {
         Gson gson = new Gson();
         String json = Util.loadFromFile(fileHandle);
         return gson.fromJson(json, type.getType());
+    }
+
+    public static Vector2[] translateAndRotateVectors(Vector2 translation, float rotation, Vector2 ... vectors) {
+        Vector2[] translatedVectors = new Vector2[vectors.length];
+        for(int index = 0; index < vectors.length; index++) {
+            translatedVectors[index] = translateAndRotate(translation, rotation, vectors[index]);
+        }
+        return translatedVectors;
+    }
+
+    public static Vector2 translateAndRotate(Vector2 translation, float rotation, Vector2 vector) {
+        // add() and rotate() modify the vector itself, so we apply our changes to the new vector we have created instead.
+        return new Vector2().add(vector).rotateRad(rotation).add(translation);
+    }
+
+    public static Vector3 translate(Vector3 translation, Vector3 vector) {
+        Vector3 newVector = new Vector3();
+        newVector.add(vector).add(translation);
+        return newVector;
     }
 
 }

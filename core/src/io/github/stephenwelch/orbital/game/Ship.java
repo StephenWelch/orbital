@@ -7,15 +7,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import io.github.stephenwelch.orbital.Util;
 import io.github.stephenwelch.orbital.engine.*;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 public class Ship implements Renderable, GameEntity {
@@ -87,12 +82,10 @@ public class Ship implements Renderable, GameEntity {
 
             RendererEffect mainEngineThrust = particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE);
 
-            Vector3 mainEngineThrustSourceVector = particleEffects.particleNamePosition.get(ShipParticleEffects.MAIN_ENGINE);
-            Vector2 mainEngineThrustSourcePosition = translate(body.getPosition(), body.getAngle(), Util.truncateVector(mainEngineThrustSourceVector));
-            float angle = (float)Math.toDegrees(body.getAngle()) + mainEngineThrustSource.z;
+            Vector3 mainEngineThrustSourceVector = particleEffects.getAdjustedEffectPosition(ShipParticleEffects.MAIN_ENGINE, getTranslationRotation());
 
-            mainEngineThrust.effect.setPosition(mainEngineThrustSourcePosition.x, mainEngineThrustSourcePosition.y);
-            Renderer.rotateParticleEffect(mainEngineThrust.effect, angle);
+            mainEngineThrust.effect.setPosition(mainEngineThrustSourceVector.x, mainEngineThrustSourceVector.y);
+            Renderer.rotateParticleEffect(mainEngineThrust.effect, mainEngineThrustSourceVector.z);
             mainEngineThrust.start();
         } else {
             RendererEffect mainEngineThrust = particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE);
@@ -132,20 +125,11 @@ public class Ship implements Renderable, GameEntity {
     }
 
     private Vector2[] getVertexPositions() {
-        return translate(body.getPosition(), body.getAngle(), vertices);
+        return Util.translateAndRotateVectors(body.getPosition(), body.getAngle(), vertices);
     }
 
-    public Vector2[] translate(Vector2 translation, float rotation, Vector2 ... vectors) {
-        Vector2[] translatedVectors = new Vector2[vectors.length];
-        for(int index = 0; index < vectors.length; index++) {
-            translatedVectors[index] = translate(translation, rotation, vectors[index]);
-        }
-        return translatedVectors;
-    }
-
-    public Vector2 translate(Vector2 translation, float rotation, Vector2 vector) {
-        // add() and rotate() modify the vector itself, so we apply our changes to the new vector we have created instead.
-        return new Vector2().add(vector).rotateRad(rotation).add(translation);
+    private Vector3 getTranslationRotation() {
+        return new Vector3(body.getPosition().x, body.getPosition().y, body.getAngle());
     }
 
 }
