@@ -3,6 +3,7 @@ package io.github.stephenwelch.orbital.engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 public class RendererEffect {
 
@@ -41,6 +42,11 @@ public class RendererEffect {
         } else {
             effect.free();
         }
+    }
+
+    public void setTranslationAndRotation(Vector3 translationAndRotation) {
+        effect.setPosition(translationAndRotation.x, translationAndRotation.y);
+        Renderer.rotateParticleEffect(effect, translationAndRotation.z);
     }
 
 }

@@ -80,12 +80,7 @@ public class Ship implements Renderable, GameEntity {
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             body.applyForceToCenter(force * (float)Math.cos(body.getAngle()), force * (float)Math.sin(body.getAngle()), true);
 
-            RendererEffect mainEngineThrust = particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE);
-
-            Vector3 mainEngineThrustSourceVector = particleEffects.getAdjustedEffectPosition(ShipParticleEffects.MAIN_ENGINE, getTranslationRotation());
-
-            mainEngineThrust.effect.setPosition(mainEngineThrustSourceVector.x, mainEngineThrustSourceVector.y);
-            Renderer.rotateParticleEffect(mainEngineThrust.effect, mainEngineThrustSourceVector.z);
+            RendererEffect mainEngineThrust = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.MAIN_ENGINE, getTranslationRotation());
             mainEngineThrust.start();
         } else {
             RendererEffect mainEngineThrust = particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE);
@@ -129,7 +124,7 @@ public class Ship implements Renderable, GameEntity {
     }
 
     private Vector3 getTranslationRotation() {
-        return new Vector3(body.getPosition().x, body.getPosition().y, body.getAngle());
+        return new Vector3(body.getPosition().x, body.getPosition().y, (float)Math.toDegrees(body.getAngle()));
     }
 
 }

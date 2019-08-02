@@ -55,9 +55,7 @@ public class Util {
     }
 
     public static Vector3 translate(Vector3 translation, Vector3 vector) {
-        Vector3 newVector = new Vector3();
-        newVector.add(vector).add(translation);
-        return newVector;
+        return new Vector3().add(vector).add(translation);
     }
 
 }

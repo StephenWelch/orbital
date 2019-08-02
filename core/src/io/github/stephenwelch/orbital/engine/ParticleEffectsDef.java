@@ -60,14 +60,22 @@ public class ParticleEffectsDef<E extends Enum> {
     public RendererEffect getEffect(E particleName) {
         return particleNameEffectMap.get(particleName);
     }
+
     public Vector3 getEffectPosition(E particleName) {
         return particleNamePosition.get(particleName);
     }
+
     public Vector3 getAdjustedEffectPosition(E particleName, Vector3 adjustment) {
         Vector3 effectPosition = getEffectPosition(particleName);
         Vector2 newPosition = Util.translateAndRotate(Util.truncateVector(adjustment), adjustment.z, Util.truncateVector(effectPosition));
         float newAngle = adjustment.z + effectPosition.z;
         return new Vector3(newPosition.x, newPosition.y, newAngle);
+    }
+
+    public RendererEffect getEffectWithAdjustedPosition(E particleName, Vector3 adjustment) {
+        RendererEffect effect = getEffect(particleName);
+        effect.setTranslationAndRotation(getAdjustedEffectPosition(particleName, adjustment));
+        return effect;
     }
 
     public void saveToJson(FileHandle fileHandle) {
