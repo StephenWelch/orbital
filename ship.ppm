@@ -1,8 +1,0 @@
-{
-  "particleNamePoolFileMap": {
-    "MAIN_ENGINE": "particles/thrust_particle.p"
-  },
-  "particleNamePosition": {
-    "MAIN_ENGINE": {}
-  }
-}

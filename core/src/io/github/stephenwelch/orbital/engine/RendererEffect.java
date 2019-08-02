@@ -17,7 +17,6 @@ public class RendererEffect {
 
     public void render(SpriteBatch spriteBatch) {
         if(enabled && !effect.isComplete()) {
-            Gdx.app.debug("EFFECT", "RENDERING");
             effect.draw(spriteBatch, Gdx.graphics.getDeltaTime());
         }
     }
