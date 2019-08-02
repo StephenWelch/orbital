@@ -9,7 +9,7 @@ public class RendererEffect {
 
     public final ParticleEffectPool.PooledEffect effect;
     public final boolean reusable;
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     public RendererEffect(ParticleEffectPool.PooledEffect effect, boolean reusable) {
         this.effect = effect;

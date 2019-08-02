@@ -90,6 +90,12 @@ public class ParticleEffectsDef<E extends Enum> {
         }
     }
 
+    public void registerAll() {
+        particleNameEffectMap.forEach((particleName, effect) -> {
+            Renderer.getInstance().registerParticleEffect(effect);
+        });
+    }
+
 //    public static <T extends Enum> ParticleEffectsDef<T> loadFromJson(FileHandle fileHandle) {
 //        String json = Util.loadFromFile(fileHandle);
 //        Gson gson = new Gson();

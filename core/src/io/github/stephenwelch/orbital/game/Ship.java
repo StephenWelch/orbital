@@ -20,7 +20,6 @@ public class Ship implements Renderable, GameEntity {
             new Vector2(0.0f, -5.9475f),
             new Vector2(9.3092f, 0.0f)
     };
-    private final Vector3 mainEngineThrustSource = new Vector3((vertices[0].x + vertices[1].x) / 2.0f, (vertices[0].y + vertices[1].y) / 2.0f, 180.0f);
     private final World world;
 
     private Body body = null;
@@ -64,7 +63,7 @@ public class Ship implements Renderable, GameEntity {
 
         particleEffects = Util.loadFromJson(Gdx.files.internal("particles/ship.ppm"), new TypeToken<ParticleEffectsDef<ShipParticleEffects>>() {});
         particleEffects.create();
-        Renderer.getInstance().registerParticleEffect(particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE));
+        particleEffects.registerAll();
     }
 
     @Override
