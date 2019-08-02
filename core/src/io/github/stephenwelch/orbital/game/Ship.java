@@ -72,9 +72,27 @@ public class Ship implements Renderable, GameEntity {
         float force = 500.0f;
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             body.applyTorque(torque, true);
+
+            RendererEffect rightForward = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.RIGHT_FORWARD_THRUSTER, getTranslationRotation());
+            RendererEffect leftBack = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.LEFT_BACK_THRUSTER, getTranslationRotation());
+
+            rightForward.start();
+            leftBack.start();
+        } else {
+            particleEffects.getEffect(ShipParticleEffects.RIGHT_FORWARD_THRUSTER).stop();
+            particleEffects.getEffect(ShipParticleEffects.LEFT_BACK_THRUSTER).stop();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             body.applyTorque(-torque, true);
+
+            RendererEffect leftForward = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.LEFT_FORWARD_THRUSTER, getTranslationRotation());
+            RendererEffect rightBack = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.RIGHT_BACK_THRUSTER, getTranslationRotation());
+
+            leftForward.start();
+            rightBack.start();
+        } else {
+            particleEffects.getEffect(ShipParticleEffects.LEFT_FORWARD_THRUSTER).stop();
+            particleEffects.getEffect(ShipParticleEffects.RIGHT_BACK_THRUSTER).stop();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             body.applyForceToCenter(force * (float)Math.cos(body.getAngle()), force * (float)Math.sin(body.getAngle()), true);
