@@ -51,7 +51,7 @@ public class Util {
 
     public static Vector2 translateAndRotate(Vector2 translation, float rotation, Vector2 vector) {
         // add() and rotate() modify the vector itself, so we apply our changes to the new vector we have created instead.
-        return new Vector2().add(vector).rotateRad(rotation).add(translation);
+        return new Vector2().add(vector).rotateRad((float)Math.toRadians(rotation)).add(translation);
     }
 
     public static Vector3 translate(Vector3 translation, Vector3 vector) {

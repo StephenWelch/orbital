@@ -127,7 +127,7 @@ public class Ship implements Renderable, GameEntity {
     }
 
     private Vector2[] getVertexPositions() {
-        return Util.translateAndRotateVectors(body.getPosition(), body.getAngle(), vertices);
+        return Util.translateAndRotateVectors(body.getPosition(), (float)Math.toDegrees(body.getAngle()), vertices);
     }
 
     private Vector3 getTranslationRotation() {
