@@ -45,13 +45,11 @@ public class ParticleEffectsDef<E extends Enum> {
     }
 
     public void addParticlesToPool(String poolFilePath, E ... particles) {
-        // Map each particle to corresponding pool
         for(E particle : particles) {
+            // Map each particle to corresponding pool
             particleNamePoolFileMap.put(particle, poolFilePath);
-        }
-        // Create a new position mapping for each particle if one doesn't exist at (0, 0, 0)
-        for(E particle : particles) {
-            particleNamePosition.computeIfAbsent(particle, k -> defaultParticlePosition);
+            // Create a new position mapping for each particle if one doesn't exist at (0, 0, 0)
+            particleNamePosition.put(particle, defaultParticlePosition);
         }
     }
 

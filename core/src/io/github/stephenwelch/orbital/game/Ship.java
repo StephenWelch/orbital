@@ -77,6 +77,8 @@ public class Ship implements Renderable, GameEntity {
             jsonWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            Gdx.app.log("SHIP", "Saved configuration file.");
         }
 
         particleEffects.create();
