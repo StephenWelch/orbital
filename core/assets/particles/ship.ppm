@@ -11,7 +11,7 @@
   "particleNamePosition": {
     "RIGHT_RETRO": {
       "x": 0.0,
-      "y": 0.0,
+      "y": 5.9457,
       "z": 0.0
     },
     "MAIN_ENGINE": {
@@ -36,7 +36,7 @@
     },
     "LEFT_RETRO": {
       "x": 0.0,
-      "y": 0.0,
+      "y": -5.9457,
       "z": 0.0
     },
     "RIGHT_BACK_THRUSTER": {

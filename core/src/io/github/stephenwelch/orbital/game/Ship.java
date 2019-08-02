@@ -82,11 +82,19 @@ public class Ship implements Renderable, GameEntity {
             RendererEffect mainEngineThrust = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.MAIN_ENGINE, getTranslationRotation());
             mainEngineThrust.start();
         } else {
-            RendererEffect mainEngineThrust = particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE);
-            mainEngineThrust.stop();
+            particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE).stop();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             body.applyForceToCenter(-force * (float)Math.cos(body.getAngle()), -force * (float)Math.sin(body.getAngle()), true);
+
+            RendererEffect leftRetro = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.LEFT_RETRO, getTranslationRotation());
+            RendererEffect rightRetro = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.RIGHT_RETRO, getTranslationRotation());
+
+            leftRetro.start();
+            rightRetro.start();
+        } else {
+            particleEffects.getEffect(ShipParticleEffects.LEFT_RETRO).stop();
+            particleEffects.getEffect(ShipParticleEffects.RIGHT_RETRO).stop();
         }
     }
 
