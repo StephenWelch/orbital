@@ -20,7 +20,6 @@ public class Ship implements Renderable, GameEntity {
             new Vector2(0.0f, -5.9475f),
             new Vector2(9.3092f, 0.0f)
     };
-    private final World world;
 
     private Body body = null;
     private Fixture fixture = null;
@@ -34,10 +33,6 @@ public class Ship implements Renderable, GameEntity {
         LEFT_RETRO, RIGHT_RETRO;
     }
 
-    public Ship(World world) {
-        this.world = world;
-    }
-
     @Override
     public void create() {
 
@@ -46,7 +41,7 @@ public class Ship implements Renderable, GameEntity {
         bodyDef.position.set(400.0f, 300.0f);
         bodyDef.angle = 0.0f;
 
-        body = world.createBody(bodyDef);
+        body = PhysicsManager.getInstance().getWorld().createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
         shape.set(vertices);
