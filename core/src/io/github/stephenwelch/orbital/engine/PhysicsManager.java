@@ -8,21 +8,20 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class PhysicsManager implements GameEntity {
 
-    private static PhysicsManager instance = new PhysicsManager(Renderer.getInstance().getCamera());
+    private static PhysicsManager instance = new PhysicsManager();
 
     private World world = new World(new Vector2(0, 0), true);
 
     private Box2DDebugRenderer debugRenderer;
-    private final Camera debugRenderCamera;
+    private Camera debugRenderCamera;
     private boolean renderPhysics = false;
 
-    public PhysicsManager(Camera camera) {
-        this.debugRenderCamera = camera;
-    }
+    private PhysicsManager() {};
 
     @Override
     public void create() {
         debugRenderer = new Box2DDebugRenderer();
+        debugRenderCamera = Renderer.getInstance().getCamera();
     }
 
     @Override

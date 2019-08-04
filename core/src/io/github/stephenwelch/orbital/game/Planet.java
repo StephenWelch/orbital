@@ -60,17 +60,17 @@ public class Planet implements Renderable, GameEntity {
 
     @Override
     public void render(ShapeRenderer renderer) {
-
+        renderer.circle(body.getPosition().x, body.getPosition().y, radius);
     }
 
     @Override
     public ShapeRenderer.ShapeType getShapeType() {
-        return null;
+        return ShapeRenderer.ShapeType.Filled;
     }
 
     @Override
     public Color getColor() {
-        return null;
+        return Color.CORAL;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class Planet implements Renderable, GameEntity {
     }
 
     public float getArea() {
-        return Math.PI * radius * radius;
+        return (float)Math.PI * radius * radius;
     }
 
 }
