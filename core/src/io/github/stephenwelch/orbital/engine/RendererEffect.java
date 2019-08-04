@@ -3,12 +3,13 @@ package io.github.stephenwelch.orbital.engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 public class RendererEffect {
 
     public final ParticleEffectPool.PooledEffect effect;
     public final boolean reusable;
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     public RendererEffect(ParticleEffectPool.PooledEffect effect, boolean reusable) {
         this.effect = effect;
@@ -17,7 +18,6 @@ public class RendererEffect {
 
     public void render(SpriteBatch spriteBatch) {
         if(enabled && !effect.isComplete()) {
-            Gdx.app.debug("EFFECT", "RENDERING");
             effect.draw(spriteBatch, Gdx.graphics.getDeltaTime());
         }
     }
@@ -42,6 +42,11 @@ public class RendererEffect {
         } else {
             effect.free();
         }
+    }
+
+    public void setTranslationAndRotation(Vector3 translationAndRotation) {
+        effect.setPosition(translationAndRotation.x, translationAndRotation.y);
+        Renderer.rotateParticleEffect(effect, translationAndRotation.z);
     }
 
 }

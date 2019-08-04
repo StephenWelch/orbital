@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import io.github.stephenwelch.orbital.engine.GameEntity;
+import io.github.stephenwelch.orbital.engine.ParticleEffectsDefCreator;
 import io.github.stephenwelch.orbital.engine.PhysicsManager;
 import io.github.stephenwelch.orbital.engine.Renderer;
 
@@ -22,6 +23,9 @@ public class OrbitalGame extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+//		ParticleEffectsDefCreator c = new ParticleEffectsDefCreator();
+//		c.create();
+
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Gdx.app.log("INIT", "Initializing Orbital...");
 

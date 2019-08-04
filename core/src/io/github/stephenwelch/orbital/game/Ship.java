@@ -3,18 +3,15 @@ package io.github.stephenwelch.orbital.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
+import com.google.gson.reflect.TypeToken;
+import io.github.stephenwelch.orbital.Util;
 import io.github.stephenwelch.orbital.engine.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 public class Ship implements Renderable, GameEntity {
 
@@ -23,13 +20,19 @@ public class Ship implements Renderable, GameEntity {
             new Vector2(0.0f, -5.9475f),
             new Vector2(9.3092f, 0.0f)
     };
-    private final Vector2 mainEngineThrustSource = new Vector2((vertices[0].x + vertices[1].x) / 2.0f, (vertices[0].y + vertices[1].y) / 2.0f);
     private final World world;
 
     private Body body = null;
     private Fixture fixture = null;
 
-    private ShipParticleEffects particleEffects = new ShipParticleEffects();
+    private ParticleEffectsDef<ShipParticleEffects> particleEffects = null;
+
+    public enum ShipParticleEffects {
+        MAIN_ENGINE,
+        LEFT_FORWARD_THRUSTER, RIGHT_FORWARD_THRUSTER,
+        LEFT_BACK_THRUSTER, RIGHT_BACK_THRUSTER,
+        LEFT_RETRO, RIGHT_RETRO;
+    }
 
     public Ship(World world) {
         this.world = world;
@@ -58,8 +61,9 @@ public class Ship implements Renderable, GameEntity {
 
         shape.dispose();
 
+        particleEffects = Util.loadFromJson(Gdx.files.internal("particles/ship.ppm"), new TypeToken<ParticleEffectsDef<ShipParticleEffects>>() {});
         particleEffects.create();
-        Renderer.getInstance().registerParticleEffect(particleEffects.mainEngineThrust);
+        particleEffects.registerAll();
     }
 
     @Override
@@ -68,22 +72,47 @@ public class Ship implements Renderable, GameEntity {
         float force = 500.0f;
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             body.applyTorque(torque, true);
+
+            RendererEffect rightForward = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.RIGHT_FORWARD_THRUSTER, getTranslationRotation());
+            RendererEffect leftBack = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.LEFT_BACK_THRUSTER, getTranslationRotation());
+
+            rightForward.start();
+            leftBack.start();
+        } else {
+            particleEffects.getEffect(ShipParticleEffects.RIGHT_FORWARD_THRUSTER).stop();
+            particleEffects.getEffect(ShipParticleEffects.LEFT_BACK_THRUSTER).stop();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             body.applyTorque(-torque, true);
+
+            RendererEffect leftForward = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.LEFT_FORWARD_THRUSTER, getTranslationRotation());
+            RendererEffect rightBack = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.RIGHT_BACK_THRUSTER, getTranslationRotation());
+
+            leftForward.start();
+            rightBack.start();
+        } else {
+            particleEffects.getEffect(ShipParticleEffects.LEFT_FORWARD_THRUSTER).stop();
+            particleEffects.getEffect(ShipParticleEffects.RIGHT_BACK_THRUSTER).stop();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             body.applyForceToCenter(force * (float)Math.cos(body.getAngle()), force * (float)Math.sin(body.getAngle()), true);
 
-            particleEffects.mainEngineThrust.effect.setPosition(getMainEngineThrustSourcePosition().x, getMainEngineThrustSourcePosition().y);
-            float angle = (float)Math.toDegrees(body.getAngle()) + 180.0f;
-            Renderer.rotateParticleEffect(particleEffects.mainEngineThrust.effect, angle);
-            particleEffects.mainEngineThrust.start();
+            RendererEffect mainEngineThrust = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.MAIN_ENGINE, getTranslationRotation());
+            mainEngineThrust.start();
         } else {
-            particleEffects.mainEngineThrust.stop();
+            particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE).stop();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             body.applyForceToCenter(-force * (float)Math.cos(body.getAngle()), -force * (float)Math.sin(body.getAngle()), true);
+
+            RendererEffect leftRetro = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.LEFT_RETRO, getTranslationRotation());
+            RendererEffect rightRetro = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.RIGHT_RETRO, getTranslationRotation());
+
+            leftRetro.start();
+            rightRetro.start();
+        } else {
+            particleEffects.getEffect(ShipParticleEffects.LEFT_RETRO).stop();
+            particleEffects.getEffect(ShipParticleEffects.RIGHT_RETRO).stop();
         }
     }
 
@@ -116,24 +145,11 @@ public class Ship implements Renderable, GameEntity {
     }
 
     private Vector2[] getVertexPositions() {
-        return translate(body.getPosition(), body.getAngle(), vertices);
+        return Util.translateAndRotateVectors(body.getPosition(), (float)Math.toDegrees(body.getAngle()), vertices);
     }
 
-    private Vector2 getMainEngineThrustSourcePosition() {
-        return translate(body.getPosition(), body.getAngle(), mainEngineThrustSource);
-    }
-
-    public Vector2[] translate(Vector2 translation, float rotation, Vector2 ... vectors) {
-        Vector2[] translatedVectors = new Vector2[vectors.length];
-        for(int index = 0; index < vectors.length; index++) {
-            translatedVectors[index] = translate(translation, rotation, vectors[index]);
-        }
-        return translatedVectors;
-    }
-
-    public Vector2 translate(Vector2 translation, float rotation, Vector2 vector) {
-        // add() and rotate() modify the vector itself, so we apply our changes to the new vector we have created instead.
-        return new Vector2().add(vector).rotateRad(rotation).add(translation);
+    private Vector3 getTranslationRotation() {
+        return new Vector3(body.getPosition().x, body.getPosition().y, (float)Math.toDegrees(body.getAngle()));
     }
 
 }

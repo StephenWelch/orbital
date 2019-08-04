@@ -1,0 +1,48 @@
+{
+  "particleNamePoolFileMap": {
+    "RIGHT_RETRO": "particles/thrust_particle.p",
+    "MAIN_ENGINE": "particles/thrust_particle.p",
+    "LEFT_BACK_THRUSTER": "particles/thrust_particle.p",
+    "LEFT_FORWARD_THRUSTER": "particles/thrust_particle.p",
+    "RIGHT_FORWARD_THRUSTER": "particles/thrust_particle.p",
+    "LEFT_RETRO": "particles/thrust_particle.p",
+    "RIGHT_BACK_THRUSTER": "particles/thrust_particle.p"
+  },
+  "particleNamePosition": {
+    "RIGHT_RETRO": {
+      "x": 0.0,
+      "y": 5.9457,
+      "z": 0.0
+    },
+    "MAIN_ENGINE": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 180.0
+    },
+    "LEFT_BACK_THRUSTER": {
+      "x": 0.0,
+      "y": 5.9457,
+      "z": 90.0
+    },
+    "LEFT_FORWARD_THRUSTER": {
+      "x": 9.3092,
+      "y": 0.0,
+      "z": 90.0
+    },
+    "RIGHT_FORWARD_THRUSTER": {
+      "x": 9.3092,
+      "y": 0.0,
+      "z": -90.0
+    },
+    "LEFT_RETRO": {
+      "x": 0.0,
+      "y": -5.9457,
+      "z": 0.0
+    },
+    "RIGHT_BACK_THRUSTER": {
+      "x": 0.0,
+      "y": -5.9457,
+      "z": -90.0
+    }
+  }
+}
