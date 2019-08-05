@@ -13,7 +13,7 @@ import io.github.stephenwelch.orbital.engine.*;
 
 import java.util.List;
 
-public class Ship implements Renderable, GameEntity {
+public class Ship implements Renderable, GameEntity, GravitationalBody {
 
     private final Vector2[] vertices = new Vector2[] {
             new Vector2(0.0f, 5.9475f),
@@ -38,7 +38,7 @@ public class Ship implements Renderable, GameEntity {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(400.0f, 300.0f);
+        bodyDef.position.set(200.0f, 150.0f);
         bodyDef.angle = 0.0f;
 
         body = PhysicsManager.getInstance().getWorld().createBody(bodyDef);
@@ -59,6 +59,8 @@ public class Ship implements Renderable, GameEntity {
         particleEffects = Util.loadFromJson(Gdx.files.internal("particles/ship.ppm"), new TypeToken<ParticleEffectsDef<ShipParticleEffects>>() {});
         particleEffects.create();
         particleEffects.registerAll();
+
+        PhysicsManager.getInstance().registerGravitationalBody(this);
     }
 
     @Override
@@ -145,6 +147,16 @@ public class Ship implements Renderable, GameEntity {
 
     private Vector3 getTranslationRotation() {
         return new Vector3(body.getPosition().x, body.getPosition().y, (float)Math.toDegrees(body.getAngle()));
+    }
+
+    @Override
+    public float getMass() {
+        return body.getMass();
+    }
+
+    @Override
+    public Body getBody() {
+        return body;
     }
 
 }

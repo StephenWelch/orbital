@@ -3,14 +3,11 @@ package io.github.stephenwelch.orbital.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.*;
-import io.github.stephenwelch.orbital.engine.GameEntity;
-import io.github.stephenwelch.orbital.engine.PhysicsManager;
-import io.github.stephenwelch.orbital.engine.Renderable;
-import io.github.stephenwelch.orbital.engine.Renderer;
+import io.github.stephenwelch.orbital.engine.*;
 
 import java.util.List;
 
-public class Planet implements Renderable, GameEntity {
+public class Planet implements Renderable, GameEntity, GravitationalBody {
 
     private final float radius;
     private final float mass;
@@ -45,6 +42,8 @@ public class Planet implements Renderable, GameEntity {
         fixture = body.createFixture(fixtureDef);
 
         shape.dispose();
+
+        PhysicsManager.getInstance().registerGravitationalBody(this);
 
     }
 
@@ -82,4 +81,13 @@ public class Planet implements Renderable, GameEntity {
         return (float)Math.PI * radius * radius;
     }
 
+    @Override
+    public float getMass() {
+        return body.getMass();
+    }
+
+    @Override
+    public Body getBody() {
+        return body;
+    }
 }
