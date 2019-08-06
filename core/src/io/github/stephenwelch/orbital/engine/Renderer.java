@@ -93,6 +93,7 @@ public class Renderer implements GameEntity {
     }
 
     private void renderComponent(Renderable renderable) {
+        if(renderable == null || renderable.getShapeType() == null || renderable.getColor() == null) return;
         renderer.setProjectionMatrix(camera.combined);
         renderer.begin(renderable.getShapeType());
         renderer.setColor(renderable.getColor());

@@ -10,7 +10,7 @@ public interface Renderable {
     void render(ShapeRenderer renderer);
     ShapeRenderer.ShapeType getShapeType();
     Color getColor();
-    List<Renderable> getSubComponents();
+    List<? extends Renderable> getSubComponents();
 
 
 }

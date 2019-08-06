@@ -66,7 +66,7 @@ public class Ship implements Renderable, GameEntity, GravitationalBody {
     @Override
     public void update() {
         float torque = 500.0f;
-        float force = 500.0f;
+        float force = 500.0f  * 2;
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             body.applyTorque(torque, true);
 
