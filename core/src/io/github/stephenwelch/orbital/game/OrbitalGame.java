@@ -16,8 +16,9 @@ public class OrbitalGame extends ApplicationAdapter {
 	// Game setup
 	private List<GameEntity> entities = new ArrayList<>();
 	private Renderer renderer = Renderer.getInstance();
-	private PhysicsManager physicsManager = new PhysicsManager(renderer.getCamera());
-	private Ship ship = new Ship(physicsManager.getWorld());
+	private PhysicsManager physicsManager = PhysicsManager.getInstance();
+	private Ship ship = new Ship();
+	private Planet planet = new Planet(50.0f, /*5.972E24f*/10000000000000000f);
 
 	// Box2d setup
 
@@ -29,14 +30,15 @@ public class OrbitalGame extends ApplicationAdapter {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Gdx.app.log("INIT", "Initializing Orbital...");
 
-		physicsManager.setRenderPhysics(false);
+		physicsManager.setRenderPhysics(true);
 
 		renderer.setAntialiasing(false);
-		renderer.setRenderList(ship);
+		renderer.setRenderList(ship, planet, physicsManager);
 
 		entities.add(renderer);
 		entities.add(physicsManager);
 		entities.add(ship);
+		entities.add(planet);
 
 		entities.forEach(GameEntity::create);
 	}

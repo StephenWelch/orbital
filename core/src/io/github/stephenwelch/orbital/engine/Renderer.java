@@ -20,10 +20,10 @@ public class Renderer implements GameEntity {
 
     private static Renderer instance = new Renderer();
 
-    public final int CAMERA_WIDTH = 800;
-    public final int CAMERA_HEIGHT = 600;
-    public final int WINDOW_WIDTH = 800;
-    public final int WINDOW_HEIGHT = 600;
+    public static final int CAMERA_WIDTH = 800;
+    public static final int CAMERA_HEIGHT = 600;
+    public static final int WINDOW_WIDTH = 800;
+    public static final int WINDOW_HEIGHT = 600;
 
     private OrthographicCamera camera = new OrthographicCamera();
     private Viewport viewport;
@@ -93,6 +93,7 @@ public class Renderer implements GameEntity {
     }
 
     private void renderComponent(Renderable renderable) {
+        if(renderable == null || renderable.getShapeType() == null || renderable.getColor() == null) return;
         renderer.setProjectionMatrix(camera.combined);
         renderer.begin(renderable.getShapeType());
         renderer.setColor(renderable.getColor());

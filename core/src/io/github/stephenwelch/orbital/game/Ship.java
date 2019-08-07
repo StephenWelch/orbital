@@ -13,14 +13,13 @@ import io.github.stephenwelch.orbital.engine.*;
 
 import java.util.List;
 
-public class Ship implements Renderable, GameEntity {
+public class Ship implements Renderable, GameEntity, GravitationalBody {
 
     private final Vector2[] vertices = new Vector2[] {
             new Vector2(0.0f, 5.9475f),
             new Vector2(0.0f, -5.9475f),
             new Vector2(9.3092f, 0.0f)
     };
-    private final World world;
 
     private Body body = null;
     private Fixture fixture = null;
@@ -34,19 +33,15 @@ public class Ship implements Renderable, GameEntity {
         LEFT_RETRO, RIGHT_RETRO;
     }
 
-    public Ship(World world) {
-        this.world = world;
-    }
-
     @Override
     public void create() {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(400.0f, 300.0f);
+        bodyDef.position.set(200.0f, 150.0f);
         bodyDef.angle = 0.0f;
 
-        body = world.createBody(bodyDef);
+        body = PhysicsManager.getInstance().getWorld().createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
         shape.set(vertices);
@@ -64,12 +59,14 @@ public class Ship implements Renderable, GameEntity {
         particleEffects = Util.loadFromJson(Gdx.files.internal("particles/ship.ppm"), new TypeToken<ParticleEffectsDef<ShipParticleEffects>>() {});
         particleEffects.create();
         particleEffects.registerAll();
+
+        PhysicsManager.getInstance().registerGravitationalBody(this);
     }
 
     @Override
     public void update() {
         float torque = 500.0f;
-        float force = 500.0f;
+        float force = 500.0f  * 2;
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             body.applyTorque(torque, true);
 
@@ -150,6 +147,16 @@ public class Ship implements Renderable, GameEntity {
 
     private Vector3 getTranslationRotation() {
         return new Vector3(body.getPosition().x, body.getPosition().y, (float)Math.toDegrees(body.getAngle()));
+    }
+
+    @Override
+    public float getMass() {
+        return body.getMass();
+    }
+
+    @Override
+    public Body getBody() {
+        return body;
     }
 
 }
