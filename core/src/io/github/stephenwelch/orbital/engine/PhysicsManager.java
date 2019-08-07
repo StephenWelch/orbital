@@ -49,9 +49,9 @@ public class PhysicsManager implements GameEntity, Renderable {
                     float force = (G * source.getMass() * target.getMass()) / (distance.len() * distance.len());
                     Vector2 gravity = new Vector2((float)Math.cos(angle) * force, (float)Math.sin(angle) * force).scl(1.0f);
                     target.getBody().applyForceToCenter(gravity, true);
-                    Gdx.app.debug("PHYSICS", "Force: " + force + "\tAngle: " + angle + "\tDistance: " + distance);
+//                    Gdx.app.debug("PHYSICS", "Force: " + force + "\tAngle: " + angle + "\tDistance: " + distance);
                     debugVectors.add(new RenderableVector2(target.getBody().getPosition(), gravity).setColor(Color.GREEN));
-                    debugVectors.add(new RenderableVector2(target.getBody().getPosition(), distance).setColor(Color.BLUE));
+//                    debugVectors.add(new RenderableVector2(target.getBody().getPosition(), distance).setColor(Color.BLUE));
                 }
             }
         }
