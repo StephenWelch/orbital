@@ -67,7 +67,7 @@ public class ParticleEffectsDef<E extends Enum> {
 
     public Vector3 getAdjustedEffectPosition(E particleName, Vector3 adjustment) {
         Vector3 effectPosition = getEffectPosition(particleName);
-        Vector2 newPosition = Util.translateAndRotate(Util.truncateVector(adjustment), adjustment.z, Util.truncateVector(effectPosition));
+        Vector2 newPosition = Util.translateAndRotateVector(Util.truncateVector(adjustment), adjustment.z, Util.truncateVector(effectPosition));
         float newAngle = adjustment.z + effectPosition.z;
         return new Vector3(newPosition.x, newPosition.y, newAngle);
     }
