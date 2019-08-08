@@ -9,8 +9,11 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import io.github.stephenwelch.orbital.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,10 +30,15 @@ public class Renderer implements GameEntity {
 
     private OrthographicCamera camera = new OrthographicCamera();
     private Viewport viewport;
+
     private ShapeRenderer renderer;
     private Renderable[] renderList = new Renderable[0];
+
     private SpriteBatch effectSpriteBatch = null;
     private List<RendererEffect> activeParticleEffects = new ArrayList<>();
+
+    private Body bodyToFollow = null;
+    private Array<Body> bodies = new Array<>();
 
     private boolean enableAntialiasing = false;
 
@@ -57,6 +65,15 @@ public class Renderer implements GameEntity {
         if(Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
             camera.zoom = Math.min(5.5f, camera.zoom + zoomInc);
         }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
+            if(bodies.isEmpty()) {
+                bodies = PhysicsManager.getInstance().getBodies();
+            }
+            bodyToFollow = bodies.pop();
+        }
+        if(bodyToFollow != null) {
+            camera.translate(bodyToFollow.getPosition().sub(Util.truncateVector(camera.position)));
+        }
 //        Gdx.app.debug("RENDERER", "Zoom: " + camera.zoom);
         camera.update();
         clear();
@@ -64,6 +81,10 @@ public class Renderer implements GameEntity {
         for(Renderable r : renderList) {
             render(r);
         }
+        if(bodyToFollow != null) {
+            render(new RenderableBody(bodyToFollow, renderer));
+        }
+
         effectSpriteBatch.setProjectionMatrix(camera.combined);
         effectSpriteBatch.begin();
         for(RendererEffect rendererEffect : activeParticleEffects) {

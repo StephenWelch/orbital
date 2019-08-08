@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,10 @@ public class PhysicsManager implements GameEntity, Renderable {
             gravityEnabled = !gravityEnabled;
         }
 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            renderPhysics = !renderPhysics;
+        }
+
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
     }
 
@@ -119,5 +125,11 @@ public class PhysicsManager implements GameEntity, Renderable {
         } else {
             return null;
         }
+    }
+
+    public Array<Body> getBodies() {
+        Array<Body> bodies = new Array<>();
+        world.getBodies(bodies);
+        return bodies;
     }
 }

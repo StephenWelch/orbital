@@ -24,7 +24,7 @@ public class OrbitalGame extends ApplicationAdapter {
 	private StarLayer bg = new StarLayer(1234)
 			.setMinColor(Color.WHITE).setMaxColor(Color.WHITE)
 			.setMinCount(100).setMaxCount(100)
-			.setMinRadius(1).setMaxRadius(2);
+			.setMinRadius(1f).setMaxRadius(1.5f);
 
 	// Box2d setup
 
@@ -37,9 +37,7 @@ public class OrbitalGame extends ApplicationAdapter {
 		Gdx.app.log("INIT", "Initializing Orbital...");
 
 		bg.create();
-
-		physicsManager.setRenderPhysics(true);
-
+		
 		renderer.setAntialiasing(false);
 		renderer.setRenderList(bg, planet, ship, physicsManager);
 
