@@ -37,7 +37,7 @@ public class OrbitalGame extends ApplicationAdapter {
 		Gdx.app.log("INIT", "Initializing Orbital...");
 
 		bg.create();
-		
+
 		renderer.setAntialiasing(false);
 		renderer.setRenderList(bg, planet, ship, physicsManager);
 

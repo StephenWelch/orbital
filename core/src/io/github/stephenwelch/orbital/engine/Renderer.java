@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -27,6 +28,7 @@ public class Renderer implements GameEntity {
     public static final int CAMERA_HEIGHT = 600;
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
+    private static final Vector2 SCREEN_CENTER = new Vector2(CAMERA_WIDTH / 2, CAMERA_HEIGHT / 2);
 
     private OrthographicCamera camera = new OrthographicCamera();
     private Viewport viewport;
@@ -66,13 +68,20 @@ public class Renderer implements GameEntity {
             camera.zoom = Math.min(5.5f, camera.zoom + zoomInc);
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
-            if(bodies.isEmpty()) {
+            if(bodyToFollow == null) {
                 bodies = PhysicsManager.getInstance().getBodies();
             }
-            bodyToFollow = bodies.pop();
+
+            if(bodies.isEmpty()) {
+                bodyToFollow = null;
+            } else {
+                bodyToFollow = bodies.pop();
+            }
         }
         if(bodyToFollow != null) {
-            camera.translate(bodyToFollow.getPosition().sub(Util.truncateVector(camera.position)));
+            camera.translate(bodyToFollow.getPosition().cpy().sub(Util.truncateVector(camera.position)));
+        } else {
+            camera.translate(SCREEN_CENTER.cpy().sub(Util.truncateVector(camera.position)));
         }
 //        Gdx.app.debug("RENDERER", "Zoom: " + camera.zoom);
         camera.update();
