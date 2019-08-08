@@ -3,6 +3,7 @@ package io.github.stephenwelch.orbital.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import io.github.stephenwelch.orbital.engine.GameEntity;
 import io.github.stephenwelch.orbital.engine.ParticleEffectsDefCreator;
 import io.github.stephenwelch.orbital.engine.PhysicsManager;
@@ -20,6 +21,11 @@ public class OrbitalGame extends ApplicationAdapter {
 	private Ship ship = new Ship();
 	private Planet planet = new Planet(50.0f, /*5.972E24f*/10000000000000000f);
 
+	private StarLayer bg = new StarLayer(1234)
+			.setMinColor(Color.WHITE).setMaxColor(Color.WHITE)
+			.setMinCount(100).setMaxCount(100)
+			.setMinRadius(1).setMaxRadius(8);
+
 	// Box2d setup
 
 	@Override
@@ -30,10 +36,12 @@ public class OrbitalGame extends ApplicationAdapter {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Gdx.app.log("INIT", "Initializing Orbital...");
 
+//		bg.create();
+
 		physicsManager.setRenderPhysics(true);
 
 		renderer.setAntialiasing(false);
-		renderer.setRenderList(ship, planet, physicsManager);
+		renderer.setRenderList(ship, planet, physicsManager, bg);
 
 		entities.add(renderer);
 		entities.add(physicsManager);
