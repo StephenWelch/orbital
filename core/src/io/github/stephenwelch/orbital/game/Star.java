@@ -1,5 +1,6 @@
 package io.github.stephenwelch.orbital.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -20,7 +21,12 @@ class Star implements Renderable {
 
     @Override
     public void render(ShapeRenderer renderer) {
+//        Gdx.app.debug("STAR", "Rendering star at: " + position + " with radius: " + radius);
         renderer.circle(position.x, position.y, radius);
+    }
+
+    public String toString() {
+        return String.format("Position: %s\tRadius: %s\tColor: %s", position, radius, color);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.github.stephenwelch.orbital.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 class StarLayer implements Renderable {
     private float minRadius = 1.0f;
-    private float maxRadius = 8.0f;
+    private float maxRadius = 2.0f;
     private int minCount = 100;
     private int maxCount = 200;
     private Color minColor, maxColor = Color.WHITE;
@@ -28,12 +29,15 @@ class StarLayer implements Renderable {
 
     public void create() {
         int count = Util.getRandomNumber(minCount, maxCount, seed);
+        Gdx.app.log("STAR_LAYER", String.format("Creating star layer with %s stars.", count));
         for(int index = 0; index < count; index++) {
-            float x = Util.getRandomNumber(0, Renderer.CAMERA_WIDTH, seed);
-            float y = Util.getRandomNumber(0, Renderer.CAMERA_HEIGHT, seed);
+            float x = Util.getRandomNumber(0f, (float)Renderer.CAMERA_WIDTH, seed);
+            float y = Util.getRandomNumber(0f, (float)Renderer.CAMERA_HEIGHT, seed);
             float radius = Util.getRandomNumber(minRadius, maxRadius, seed);
             Color color = minColor.lerp(maxColor, Util.getRandomNumber(0f, 1f, seed));
-            layer.add(new Star(new Vector2(x, y), radius, color));
+            Star star = new Star(new Vector2(x, y), radius, color);
+            layer.add(star);
+//            Gdx.app.debug("STAR_LAYER", String.format("Created star: %s", star));
         }
     }
 

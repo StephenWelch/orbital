@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
 
 public class Util {
 
-    private static Random random = new Random();
+    private static long currentSeed = 1234;
+    private static Random random = new Random(currentSeed);
+
     
     public double normalizeAngleDegrees(double angle) {
         while(angle < 0) angle += 180;
@@ -75,13 +77,17 @@ public class Util {
         return Arrays.stream(vectors).map(Util::truncateVector).toArray(Vector2[]::new);
     }
 
-    public static float getRandomNumber(float min, float max, long seed) {
-        random.setSeed(seed);
+    public static Float getRandomNumber(Float min, Float max, long seed) {
+        if(currentSeed != seed) {
+            random.setSeed(seed);
+        }
         return (random.nextFloat() * (max - min)) + min;
     }
 
-    public static int getRandomNumber(int min, int max, long seed) {
-        random.setSeed(seed);
+    public static Integer getRandomNumber(Integer min, Integer max, long seed) {
+        if(currentSeed != seed) {
+            random.setSeed(seed);
+        }
         return (random.nextInt() * (max - min)) + min;
     }
 
