@@ -81,7 +81,7 @@ public class Renderer implements GameEntity {
         if(bodyToFollow != null) {
             camera.translate(bodyToFollow.getPosition().cpy().sub(Util.truncateVector(camera.position)));
         } else {
-            camera.translate(SCREEN_CENTER.cpy().sub(Util.truncateVector(camera.position)));
+            // Stay where we are
         }
 //        Gdx.app.debug("RENDERER", "Zoom: " + camera.zoom);
         camera.update();
