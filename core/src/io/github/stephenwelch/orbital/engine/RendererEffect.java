@@ -36,8 +36,8 @@ public class RendererEffect {
     public void stop() {
         if(started) {
             Gdx.app.debug("EFFECT", "Stopping");
-
             started = false;
+            effect.reset();
         }
         if(effect.isComplete() && !reusable) {
             effect.free();

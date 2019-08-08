@@ -60,9 +60,17 @@ public class Renderer implements GameEntity {
 //        Gdx.app.debug("RENDERER", "Zoom: " + camera.zoom);
         camera.update();
         clear();
+        
         for(Renderable r : renderList) {
             render(r);
         }
+        effectSpriteBatch.setProjectionMatrix(camera.combined);
+        effectSpriteBatch.begin();
+        for(RendererEffect rendererEffect : activeParticleEffects) {
+            // Updates and draws the effect
+            rendererEffect.render(effectSpriteBatch);
+        }
+        effectSpriteBatch.end();
     }
 
     @Override
@@ -79,15 +87,6 @@ public class Renderer implements GameEntity {
             }
         }
         renderComponent(renderable);
-
-        effectSpriteBatch.setProjectionMatrix(camera.combined);
-        effectSpriteBatch.begin();
-        for(RendererEffect rendererEffect : activeParticleEffects) {
-            // Updates and draws the effect
-            rendererEffect.render(effectSpriteBatch);
-        }
-        effectSpriteBatch.end();
-
     }
 
     private void renderComponent(Renderable renderable) {

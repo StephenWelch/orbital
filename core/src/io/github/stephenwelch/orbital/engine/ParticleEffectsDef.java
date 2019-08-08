@@ -93,6 +93,7 @@ public class ParticleEffectsDef<E extends Enum> {
     public void registerAll() {
         particleNameEffectMap.forEach((particleName, effect) -> {
             Renderer.getInstance().registerParticleEffect(effect);
+            Gdx.app.log("PARTICLE_EFFECT_DEF", String.format("Registered particle effect %s", particleName));
         });
     }
 
