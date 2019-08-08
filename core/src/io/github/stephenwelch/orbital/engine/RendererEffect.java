@@ -9,7 +9,7 @@ public class RendererEffect {
 
     public final ParticleEffectPool.PooledEffect effect;
     public final boolean reusable;
-    private boolean enabled = false;
+    private boolean started = false;
 
     public RendererEffect(ParticleEffectPool.PooledEffect effect, boolean reusable) {
         this.effect = effect;
@@ -17,29 +17,29 @@ public class RendererEffect {
     }
 
     public void render(SpriteBatch spriteBatch) {
-        if(enabled && !effect.isComplete()) {
+        if(started) {
             effect.draw(spriteBatch, Gdx.graphics.getDeltaTime());
+        } else if(effect.isComplete()) {
+            stop();
         }
     }
 
     public void start() {
-        enabled = true;
-        effect.start();
+        if(!started ) {
+            Gdx.app.debug("EFFECT", "Starting");
+            started = true;
+            effect.reset();
+            effect.start();
+        }
     }
 
     public void stop() {
-        enabled = false;
-        effect.reset();
-    }
+        if(started) {
+            Gdx.app.debug("EFFECT", "Stopping");
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public void dispose() {
-        if(reusable) {
-            effect.reset();
-        } else {
+            started = false;
+        }
+        if(effect.isComplete() && !reusable) {
             effect.free();
         }
     }

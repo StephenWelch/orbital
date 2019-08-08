@@ -1,6 +1,7 @@
 package io.github.stephenwelch.orbital.engine;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,6 +23,7 @@ public class PhysicsManager implements GameEntity, Renderable {
     private Box2DDebugRenderer debugRenderer;
     private Camera debugRenderCamera;
     private boolean renderPhysics = false;
+    private boolean gravityEnabled = true;
     private List<GravitationalBody> gravitationalBodies = new ArrayList<>();
     private List<Renderable> debugVectors = new ArrayList<>();
 
@@ -35,25 +37,32 @@ public class PhysicsManager implements GameEntity, Renderable {
 
     @Override
     public void update() {
+        debugVectors.clear();
+
         if(renderPhysics && debugRenderCamera != null) {
             debugRenderer.render(world, debugRenderCamera.combined);
         }
 
-        debugVectors.clear();
-        for(GravitationalBody source : gravitationalBodies) {
-            for(GravitationalBody target : gravitationalBodies) {
-                Vector2 distance = source.getBody().getPosition().sub(target.getBody().getPosition());
+        if(gravityEnabled) {
+            for(GravitationalBody source : gravitationalBodies) {
+                for(GravitationalBody target : gravitationalBodies) {
+                    Vector2 distance = source.getBody().getPosition().sub(target.getBody().getPosition());
 
-                if(distance.len() > 0) {
-                    float angle = MathUtils.degreesToRadians * distance.angle();
-                    float force = (G * source.getMass() * target.getMass()) / (distance.len() * distance.len());
-                    Vector2 gravity = new Vector2((float)Math.cos(angle) * force, (float)Math.sin(angle) * force).scl(1.0f);
-                    target.getBody().applyForceToCenter(gravity, true);
+                    if(distance.len() > 0) {
+                        float angle = MathUtils.degreesToRadians * distance.angle();
+                        float force = (G * source.getMass() * target.getMass()) / (distance.len() * distance.len());
+                        Vector2 gravity = new Vector2((float)Math.cos(angle) * force, (float)Math.sin(angle) * force).scl(1.0f);
+                        target.getBody().applyForceToCenter(gravity, true);
 //                    Gdx.app.debug("PHYSICS", "Force: " + force + "\tAngle: " + angle + "\tDistance: " + distance);
-                    debugVectors.add(new RenderableVector2(target.getBody().getPosition(), gravity).setColor(Color.GREEN));
+                        debugVectors.add(new RenderableVector2(target.getBody().getPosition(), gravity).setColor(Color.GREEN));
 //                    debugVectors.add(new RenderableVector2(target.getBody().getPosition(), distance).setColor(Color.BLUE));
+                    }
                 }
             }
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            gravityEnabled = !gravityEnabled;
         }
 
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
@@ -70,6 +79,11 @@ public class PhysicsManager implements GameEntity, Renderable {
 
     public PhysicsManager setRenderPhysics(boolean enabled) {
         renderPhysics = enabled;
+        return this;
+    }
+
+    public PhysicsManager setGravityEnabled(boolean enabled) {
+        gravityEnabled = enabled;
         return this;
     }
 
