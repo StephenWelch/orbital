@@ -68,6 +68,7 @@ public class Renderer implements GameEntity {
     @Override
     public void dispose() {
         renderer.dispose();
+        effectSpriteBatch.dispose();
     }
 
     private void render(Renderable renderable) {
@@ -84,9 +85,6 @@ public class Renderer implements GameEntity {
         for(RendererEffect rendererEffect : activeParticleEffects) {
             // Updates and draws the effect
             rendererEffect.render(effectSpriteBatch);
-            if(rendererEffect.effect.isComplete()) {
-                rendererEffect.dispose();
-            }
         }
         effectSpriteBatch.end();
 

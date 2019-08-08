@@ -26,11 +26,11 @@ relative: false
 scalingCount: 3
 scaling0: 1.0
 scaling1: 1.0
-scaling2: 0.0
+scaling2: 1.0
 timelineCount: 3
 timeline0: 0.0
-timeline1: 0.9520548
-timeline2: 0.9931507
+timeline1: 0.43150684
+timeline2: 1.0
 independent: false
 - Life Offset - 
 active: false
@@ -130,7 +130,7 @@ timeline2: 0.72602737
 timeline3: 1.0
 - Options - 
 attached: false
-continuous: false
+continuous: true
 aligned: false
 additive: true
 behind: false
