@@ -53,10 +53,10 @@ public class Renderer implements GameEntity {
     @Override
     public void create() {
         rayHandler = new RayHandler(PhysicsManager.getInstance().getWorld());
-        rayHandler.setShadows(false);
-        rayHandler.setAmbientLight(0.0f);
+        rayHandler.setShadows(true);
+        rayHandler.setAmbientLight(0.3f);
         rayHandler.setBlur(true);
-//        rayHandler.setBlurNum(5);
+        rayHandler.setBlurNum(1);
 
         renderer = new ShapeRenderer();
         effectSpriteBatch = new SpriteBatch();

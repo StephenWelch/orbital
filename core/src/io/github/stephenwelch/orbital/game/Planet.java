@@ -26,7 +26,7 @@ public class Planet implements Renderable, GameEntity, GravitationalBody {
     @Override
     public void create() {
 
-        light = new PointLight(Renderer.getInstance().getRayHandler(), 128, getColor(), 500, 0f, 0f);
+        light = new PointLight(Renderer.getInstance().getRayHandler(), 360, getColor(), 500, 0f, 0f);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -59,7 +59,7 @@ public class Planet implements Renderable, GameEntity, GravitationalBody {
 
     @Override
     public void dispose() {
-        light.dispose();
+//        light.dispose();
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.github.stephenwelch.orbital.game;
 
 import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -26,17 +27,27 @@ class Star implements GameEntity, Renderable {
 
     @Override
     public void create() {
-        light = new PointLight(Renderer.getInstance().getRayHandler(), 128, color, radius * 6f, 0f, 0f);
+        light = new PointLight(Renderer.getInstance().getRayHandler(), 4, color, radius * 8f, 0f, 0f);
+        light.setSoft(false);
+        light.setSoftnessLength(0.0f);
     }
 
     @Override
     public void update() {
+//        if(Gdx.input.isKeyPressed(Input.Keys.B)) {
+////            light.setSoftnessLength(light.getSoftShadowLength() - 1.0f);
+//            light.setDistance(light.getDistance() - 1.0f);
+//        }
+//        if(Gdx.input.isKeyPressed(Input.Keys.N)) {
+//            light.setDistance(light.getDistance() + 1.0f);
+////            light.setSoftnessLength(light.getSoftShadowLength() + 1.0f);
+//        }
         light.setPosition(position);
     }
 
     @Override
     public void dispose() {
-        light.dispose();
+//        light.dispose();
     }
 
     @Override
