@@ -13,9 +13,9 @@ import java.util.List;
 
 public class StarBackground implements GameEntity, Renderable {
 
-    private StarLayer backLayer = new StarLayer(1234)
+    private StarLayer backLayer = new StarLayer(Renderer.CAMERA_WIDTH, Renderer.CAMERA_HEIGHT, 1234)
             .setMinColor(Color.WHITE).setMaxColor(Color.WHITE)
-            .setMinCount(100).setMaxCount(100)
+            .setMinCount(1000).setMaxCount(1000)
             .setMinRadius(1f).setMaxRadius(1.5f);
 
     private List<StarLayer> layers = Arrays.asList(backLayer);
@@ -23,7 +23,7 @@ public class StarBackground implements GameEntity, Renderable {
     private Vector2 lastPosition = new Vector2();
 
     public void create() {
-        backLayer.create();
+        layers.forEach(GameEntity::create);
         lastPosition = getCameraPosition();
     }
 
@@ -31,15 +31,17 @@ public class StarBackground implements GameEntity, Renderable {
     public void update() {
         Vector2 currentPosition = getCameraPosition();
         Vector2 delta = currentPosition.cpy().sub(lastPosition);
-        if(!delta.equals(Vector2.Zero)) System.out.println(delta);
         layers.forEach(l -> l.translate(delta));
         layers.forEach(l -> l.scroll(delta));
+
+        layers.forEach(GameEntity::update);
+
         lastPosition = currentPosition;
     }
 
     @Override
     public void dispose() {
-
+        layers.forEach(GameEntity::dispose);
     }
 
     @Override

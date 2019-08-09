@@ -1,5 +1,6 @@
 package io.github.stephenwelch.orbital.engine;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -28,11 +29,14 @@ public class Renderer implements GameEntity {
     public static final int CAMERA_HEIGHT = 1080;
     public static final int WINDOW_WIDTH = 1920;
     public static final int WINDOW_HEIGHT = 1080;
+    public static final float MIN_ZOOM = 1.0f;
+    public static final float MAX_ZOOM = 0.025f;
     private static final Vector2 SCREEN_CENTER = new Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
     private OrthographicCamera camera = new OrthographicCamera();
     private Viewport viewport;
 
+    private RayHandler rayHandler;
     private ShapeRenderer renderer;
     private Renderable[] renderList = new Renderable[0];
 
@@ -43,6 +47,7 @@ public class Renderer implements GameEntity {
     private Array<Body> bodies = new Array<>();
 
     private boolean enableAntialiasing = false;
+    private boolean enableLighting = true;
 
     private Renderer(Renderable ... renderables) {
         setRenderList(renderables);
@@ -50,11 +55,19 @@ public class Renderer implements GameEntity {
 
     @Override
     public void create() {
+        rayHandler = new RayHandler(PhysicsManager.getInstance().getWorld());
+        rayHandler.setShadows(true);
+        rayHandler.setAmbientLight(0.5f);
+        rayHandler.setBlur(true);
+        rayHandler.setBlurNum(1);
+
         renderer = new ShapeRenderer();
         effectSpriteBatch = new SpriteBatch();
 
         camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT);
         viewport = new FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT, camera);
+
+        camera.zoom = MIN_ZOOM;
     }
 
     @Override
@@ -62,10 +75,13 @@ public class Renderer implements GameEntity {
 //        Gdx.app.debug("RENDERER", "Updating renderer: " + renderList);
         float zoomInc = 0.025f;
         if(Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
-            camera.zoom = Math.max(0.025f, camera.zoom - zoomInc);
+            camera.zoom = Math.max(MAX_ZOOM, camera.zoom - zoomInc);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
-            camera.zoom = Math.min(5.5f, camera.zoom + zoomInc);
+            camera.zoom = Math.min(MIN_ZOOM, camera.zoom + zoomInc);
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            enableLighting = !enableLighting;
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
             if(bodyToFollow == null) {
@@ -102,10 +118,16 @@ public class Renderer implements GameEntity {
             rendererEffect.render(effectSpriteBatch);
         }
         effectSpriteBatch.end();
+
+        if(enableLighting) {
+            rayHandler.setCombinedMatrix(camera);
+            rayHandler.updateAndRender();
+        }
     }
 
     @Override
     public void dispose() {
+        rayHandler.dispose();
         renderer.dispose();
         effectSpriteBatch.dispose();
     }
@@ -156,6 +178,15 @@ public class Renderer implements GameEntity {
         return this;
     }
 
+    public boolean isEnableLighting() {
+        return enableLighting;
+    }
+
+    public Renderer setEnableLighting(boolean enableLighting) {
+        this.enableLighting = enableLighting;
+        return this;
+    }
+
     public void registerParticleEffect(RendererEffect effect) {
         activeParticleEffects.add(effect);
     }
@@ -166,6 +197,10 @@ public class Renderer implements GameEntity {
 
     public Body getBodyToFollow() {
         return bodyToFollow;
+    }
+
+    public RayHandler getRayHandler() {
+        return rayHandler;
     }
 
     public boolean isInWindow(Vector2 position) {

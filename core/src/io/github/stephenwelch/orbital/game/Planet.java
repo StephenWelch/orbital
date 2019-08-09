@@ -1,5 +1,6 @@
 package io.github.stephenwelch.orbital.game;
 
+import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.*;
@@ -12,6 +13,8 @@ public class Planet implements Renderable, GameEntity, GravitationalBody {
     private final float radius;
     private final float mass;
 
+    private PointLight light = null;
+
     private Body body = null;
     private Fixture fixture = null;
 
@@ -22,6 +25,8 @@ public class Planet implements Renderable, GameEntity, GravitationalBody {
 
     @Override
     public void create() {
+
+        light = new PointLight(Renderer.getInstance().getRayHandler(), 360, getColor(), 500, 0f, 0f);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -49,12 +54,12 @@ public class Planet implements Renderable, GameEntity, GravitationalBody {
 
     @Override
     public void update() {
-
+        light.setPosition(body.getPosition());
     }
 
     @Override
     public void dispose() {
-
+//        light.dispose();
     }
 
     @Override

@@ -1,15 +1,20 @@
 package io.github.stephenwelch.orbital.game;
 
+import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import io.github.stephenwelch.orbital.engine.GameEntity;
 import io.github.stephenwelch.orbital.engine.Renderable;
 import io.github.stephenwelch.orbital.engine.Renderer;
 
 import java.util.List;
 
-class Star implements Renderable {
+class Star implements GameEntity, Renderable {
+
+    private PointLight light;
     private Color color;
     private Vector2 position;
     private float radius;
@@ -18,6 +23,23 @@ class Star implements Renderable {
         this.color = color;
         this.position = position;
         this.radius = radius;
+    }
+
+    @Override
+    public void create() {
+        light = new PointLight(Renderer.getInstance().getRayHandler(), 4, Color.LIGHT_GRAY, radius * 8f, 0f, 0f);
+        light.setSoft(true);
+        light.setSoftnessLength(0.5f);
+    }
+
+    @Override
+    public void update() {
+        light.setPosition(position);
+    }
+
+    @Override
+    public void dispose() {
+//        light.dispose();
     }
 
     @Override
@@ -82,4 +104,5 @@ class Star implements Renderable {
         this.radius = radius;
         return this;
     }
+
 }
