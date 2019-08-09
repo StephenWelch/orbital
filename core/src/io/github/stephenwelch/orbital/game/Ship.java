@@ -1,5 +1,6 @@
 package io.github.stephenwelch.orbital.game;
 
+import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -21,6 +22,9 @@ public class Ship implements Renderable, GameEntity, GravitationalBody {
             new Vector2(9.3092f, 0.0f)
     };
 
+    private PointLight rightLight = null;
+    private PointLight leftLight = null;
+
     private Body body = null;
     private Fixture fixture = null;
 
@@ -35,6 +39,9 @@ public class Ship implements Renderable, GameEntity, GravitationalBody {
 
     @Override
     public void create() {
+
+        rightLight = new PointLight(Renderer.getInstance().getRayHandler(), 128, Color.RED, 5f, 0f, 0f);
+        leftLight = new PointLight(Renderer.getInstance().getRayHandler(), 128, Color.GREEN, 5f, 0f, 0f);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -111,6 +118,10 @@ public class Ship implements Renderable, GameEntity, GravitationalBody {
             particleEffects.getEffect(ShipParticleEffects.LEFT_RETRO).stop();
             particleEffects.getEffect(ShipParticleEffects.RIGHT_RETRO).stop();
         }
+
+        rightLight.setPosition(Util.translateAndRotateVector(body.getPosition(), (float)Math.toDegrees(body.getAngle()), vertices[0]));
+        leftLight.setPosition(Util.translateAndRotateVector(body.getPosition(), (float)Math.toDegrees(body.getAngle()), vertices[1]));
+
     }
 
     @Override
