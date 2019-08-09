@@ -51,7 +51,7 @@ class StarLayer implements Renderable {
     public void scroll(Vector2 translation) {
 //        translate(translation);
 
-        layer.stream().filter(Star::isOutOfScreenBounds).forEach(Star::moveIntoScreenBounds);
+        layer.stream().filter(s -> !Renderer.getInstance().isInWindow(s.getPosition())).forEach(Star::moveIntoScreenBounds);
     }
 
     @Override

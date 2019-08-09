@@ -28,7 +28,7 @@ public class Renderer implements GameEntity {
     public static final int CAMERA_HEIGHT = 600;
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
-    private static final Vector2 SCREEN_CENTER = new Vector2(CAMERA_WIDTH / 2, CAMERA_HEIGHT / 2);
+    private static final Vector2 SCREEN_CENTER = new Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
     private OrthographicCamera camera = new OrthographicCamera();
     private Viewport viewport;
@@ -78,6 +78,7 @@ public class Renderer implements GameEntity {
                 bodyToFollow = bodies.pop();
             }
         }
+
         if(bodyToFollow != null) {
             camera.translate(bodyToFollow.getPosition().cpy().sub(Util.truncateVector(camera.position)));
         } else {
@@ -165,6 +166,32 @@ public class Renderer implements GameEntity {
 
     public Body getBodyToFollow() {
         return bodyToFollow;
+    }
+
+    public boolean isInWindow(Vector2 position) {
+        if(position.x > getRightCameraEdgePosition() || position.x < getLeftCameraEdgePosition()) {
+            return false;
+        } else if(position.y > getTopCameraEdgePosition() || position.y < getBottomCameraEdgePosition()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public float getLeftCameraEdgePosition() {
+        return camera.position.x - (camera.viewportWidth / 2);
+    }
+
+    public float getRightCameraEdgePosition() {
+        return camera.position.x + (camera.viewportWidth / 2);
+    }
+
+    public float getTopCameraEdgePosition() {
+        return camera.position.y + (camera.viewportHeight / 2);
+    }
+
+    public float getBottomCameraEdgePosition() {
+        return camera.position.y - (camera.viewportHeight / 2);
     }
 
     // Adapted from: https://stackoverflow.com/questions/14839648/libgdx-particleeffect-rotation

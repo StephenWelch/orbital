@@ -8,10 +8,8 @@ import io.github.stephenwelch.orbital.engine.GameEntity;
 import io.github.stephenwelch.orbital.engine.Renderable;
 import io.github.stephenwelch.orbital.engine.Renderer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class StarBackground implements GameEntity, Renderable {
 
@@ -26,17 +24,15 @@ public class StarBackground implements GameEntity, Renderable {
 
     public void create() {
         backLayer.create();
-        lastPosition = getPositionOfBodyToFollow();
+        lastPosition = getCameraPosition();
     }
 
     @Override
     public void update() {
-        Vector2 currentPosition = getPositionOfBodyToFollow();
-        if(lastPosition != null && currentPosition != null) {
-            Vector2 delta = currentPosition.cpy().sub(lastPosition);
-            layers.forEach(l -> l.scroll(delta));
-        }
-
+        Vector2 currentPosition = getCameraPosition();
+        Vector2 delta = currentPosition.cpy().sub(lastPosition);
+        if(!delta.equals(Vector2.Zero)) System.out.println(delta);
+        layers.forEach(l -> l.scroll(delta));
         lastPosition = currentPosition;
     }
 
@@ -50,8 +46,8 @@ public class StarBackground implements GameEntity, Renderable {
 
     }
 
-    private Vector2 getPositionOfBodyToFollow() {
-        return Renderer.getInstance().getBodyToFollow() == null ? null : Renderer.getInstance().getBodyToFollow().getPosition();
+    private Vector2 getCameraPosition() {
+        return Util.truncateVector(Renderer.getInstance().getCamera().position);
     }
 
     @Override

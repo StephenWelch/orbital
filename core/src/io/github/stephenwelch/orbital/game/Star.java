@@ -26,25 +26,19 @@ class Star implements Renderable {
         renderer.circle(position.x, position.y, radius);
     }
 
-    public boolean isOutOfScreenBounds() {
-        if((position.x > Renderer.CAMERA_WIDTH || position.x < 0) && (position.y > Renderer.CAMERA_HEIGHT || position.y < 0)) {
-            return true;
-        }
-        return false;
-    }
-
     public void moveIntoScreenBounds() {
-        if(position.x > Renderer.CAMERA_WIDTH) {
-            position.x = Renderer.CAMERA_WIDTH - position.x;
+        Renderer renderer = Renderer.getInstance();
+        if(position.x > renderer.getRightCameraEdgePosition()) {
+            position.x = renderer.getLeftCameraEdgePosition() + (position.x - renderer.getRightCameraEdgePosition());
         }
-        if(position.x < 0) {
-            position.x = Renderer.CAMERA_WIDTH + position.x;
+        if(position.x < renderer.getLeftCameraEdgePosition()) {
+            position.x = renderer.getRightCameraEdgePosition() - (renderer.getLeftCameraEdgePosition() - position.x);
         }
-        if(position.y > Renderer.CAMERA_HEIGHT) {
-            position.y = Renderer.CAMERA_HEIGHT - position.y;
+        if(position.y > renderer.getTopCameraEdgePosition()) {
+            position.y = renderer.getBottomCameraEdgePosition() + (position.y - renderer.getTopCameraEdgePosition());
         }
-        if(position.y < 0) {
-            position.y = Renderer.CAMERA_HEIGHT + position.y;
+        if(position.y < renderer.getBottomCameraEdgePosition()) {
+            position.y = renderer.getTopCameraEdgePosition() - (renderer.getBottomCameraEdgePosition() - position.y);
         }
     }
 
