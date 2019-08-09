@@ -9,8 +9,12 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import io.github.stephenwelch.orbital.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,13 +28,19 @@ public class Renderer implements GameEntity {
     public static final int CAMERA_HEIGHT = 600;
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
+    private static final Vector2 SCREEN_CENTER = new Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
     private OrthographicCamera camera = new OrthographicCamera();
     private Viewport viewport;
+
     private ShapeRenderer renderer;
     private Renderable[] renderList = new Renderable[0];
+
     private SpriteBatch effectSpriteBatch = null;
     private List<RendererEffect> activeParticleEffects = new ArrayList<>();
+
+    private Body bodyToFollow = null;
+    private Array<Body> bodies = new Array<>();
 
     private boolean enableAntialiasing = false;
 
@@ -57,12 +67,41 @@ public class Renderer implements GameEntity {
         if(Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
             camera.zoom = Math.min(5.5f, camera.zoom + zoomInc);
         }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
+            if(bodyToFollow == null) {
+                bodies = PhysicsManager.getInstance().getBodies();
+            }
+
+            if(bodies.isEmpty()) {
+                bodyToFollow = null;
+            } else {
+                bodyToFollow = bodies.pop();
+            }
+        }
+
+        if(bodyToFollow != null) {
+            camera.translate(bodyToFollow.getPosition().cpy().sub(Util.truncateVector(camera.position)));
+        } else {
+            // Stay where we are
+        }
 //        Gdx.app.debug("RENDERER", "Zoom: " + camera.zoom);
         camera.update();
         clear();
+        
         for(Renderable r : renderList) {
             render(r);
         }
+        if(bodyToFollow != null) {
+            render(new RenderableBody(bodyToFollow, renderer));
+        }
+
+        effectSpriteBatch.setProjectionMatrix(camera.combined);
+        effectSpriteBatch.begin();
+        for(RendererEffect rendererEffect : activeParticleEffects) {
+            // Updates and draws the effect
+            rendererEffect.render(effectSpriteBatch);
+        }
+        effectSpriteBatch.end();
     }
 
     @Override
@@ -79,15 +118,6 @@ public class Renderer implements GameEntity {
             }
         }
         renderComponent(renderable);
-
-        effectSpriteBatch.setProjectionMatrix(camera.combined);
-        effectSpriteBatch.begin();
-        for(RendererEffect rendererEffect : activeParticleEffects) {
-            // Updates and draws the effect
-            rendererEffect.render(effectSpriteBatch);
-        }
-        effectSpriteBatch.end();
-
     }
 
     private void renderComponent(Renderable renderable) {
@@ -132,6 +162,36 @@ public class Renderer implements GameEntity {
 
     public void deregisterParticleEffect(RendererEffect effect) {
         activeParticleEffects.remove(effect);
+    }
+
+    public Body getBodyToFollow() {
+        return bodyToFollow;
+    }
+
+    public boolean isInWindow(Vector2 position) {
+        if(position.x > getRightCameraEdgePosition() || position.x < getLeftCameraEdgePosition()) {
+            return false;
+        } else if(position.y > getTopCameraEdgePosition() || position.y < getBottomCameraEdgePosition()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public float getLeftCameraEdgePosition() {
+        return camera.position.x - (camera.viewportWidth / 2);
+    }
+
+    public float getRightCameraEdgePosition() {
+        return camera.position.x + (camera.viewportWidth / 2);
+    }
+
+    public float getTopCameraEdgePosition() {
+        return camera.position.y + (camera.viewportHeight / 2);
+    }
+
+    public float getBottomCameraEdgePosition() {
+        return camera.position.y - (camera.viewportHeight / 2);
     }
 
     // Adapted from: https://stackoverflow.com/questions/14839648/libgdx-particleeffect-rotation

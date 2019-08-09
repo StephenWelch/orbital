@@ -26,7 +26,7 @@ public class RendererEffect {
 
     public void start() {
         if(!started ) {
-            Gdx.app.debug("EFFECT", "Starting");
+//            Gdx.app.debug("EFFECT", "Starting");
             started = true;
             effect.reset();
             effect.start();
@@ -35,9 +35,9 @@ public class RendererEffect {
 
     public void stop() {
         if(started) {
-            Gdx.app.debug("EFFECT", "Stopping");
-
+//            Gdx.app.debug("EFFECT", "Stopping");
             started = false;
+            effect.reset();
         }
         if(effect.isComplete() && !reusable) {
             effect.free();
