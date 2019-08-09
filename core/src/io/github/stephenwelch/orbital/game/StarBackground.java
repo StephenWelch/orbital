@@ -32,6 +32,7 @@ public class StarBackground implements GameEntity, Renderable {
         Vector2 currentPosition = getCameraPosition();
         Vector2 delta = currentPosition.cpy().sub(lastPosition);
         if(!delta.equals(Vector2.Zero)) System.out.println(delta);
+        layers.forEach(l -> l.translate(delta));
         layers.forEach(l -> l.scroll(delta));
         lastPosition = currentPosition;
     }

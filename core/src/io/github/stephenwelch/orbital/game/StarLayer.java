@@ -18,7 +18,7 @@ class StarLayer implements Renderable {
     private int minCount = 100;
     private int maxCount = 200;
     private Color minColor, maxColor = Color.WHITE;
-    private float translationMultiplier = 1.0f;
+    private float translationMultiplier = 0.5f;
     private final long seed;
 
     public StarLayer(long seed) {
