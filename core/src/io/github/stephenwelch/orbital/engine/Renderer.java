@@ -29,6 +29,8 @@ public class Renderer implements GameEntity {
     public static final int CAMERA_HEIGHT = 1080;
     public static final int WINDOW_WIDTH = 1920;
     public static final int WINDOW_HEIGHT = 1080;
+    public static final float MIN_ZOOM = 1.0f;
+    public static final float MAX_ZOOM = 0.025f;
     private static final Vector2 SCREEN_CENTER = new Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
     private OrthographicCamera camera = new OrthographicCamera();
@@ -64,6 +66,8 @@ public class Renderer implements GameEntity {
 
         camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT);
         viewport = new FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT, camera);
+
+        camera.zoom = MIN_ZOOM;
     }
 
     @Override
@@ -71,10 +75,10 @@ public class Renderer implements GameEntity {
 //        Gdx.app.debug("RENDERER", "Updating renderer: " + renderList);
         float zoomInc = 0.025f;
         if(Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
-            camera.zoom = Math.max(0.025f, camera.zoom - zoomInc);
+            camera.zoom = Math.max(MAX_ZOOM, camera.zoom - zoomInc);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
-            camera.zoom = Math.min(5.5f, camera.zoom + zoomInc);
+            camera.zoom = Math.min(MIN_ZOOM, camera.zoom + zoomInc);
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.L)) {
             enableLighting = !enableLighting;
