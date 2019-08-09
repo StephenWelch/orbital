@@ -21,10 +21,7 @@ public class OrbitalGame extends ApplicationAdapter {
 	private Ship ship = new Ship();
 	private Planet planet = new Planet(50.0f, /*5.972E24f*/10000000000000000f);
 
-	private StarLayer bg = new StarLayer(1234)
-			.setMinColor(Color.WHITE).setMaxColor(Color.WHITE)
-			.setMinCount(100).setMaxCount(100)
-			.setMinRadius(1f).setMaxRadius(1.5f);
+	private StarBackground bg = new StarBackground();
 
 	// Box2d setup
 
@@ -45,6 +42,7 @@ public class OrbitalGame extends ApplicationAdapter {
 		entities.add(physicsManager);
 		entities.add(ship);
 		entities.add(planet);
+		entities.add(bg);
 
 		entities.forEach(GameEntity::create);
 	}

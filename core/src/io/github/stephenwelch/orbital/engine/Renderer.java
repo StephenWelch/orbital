@@ -163,6 +163,10 @@ public class Renderer implements GameEntity {
         activeParticleEffects.remove(effect);
     }
 
+    public Body getBodyToFollow() {
+        return bodyToFollow;
+    }
+
     // Adapted from: https://stackoverflow.com/questions/14839648/libgdx-particleeffect-rotation
     public static void rotateParticleEffect(ParticleEffect effect, float degrees) {
         for (ParticleEmitter emitter : effect.getEmitters()) {

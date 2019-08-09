@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import io.github.stephenwelch.orbital.engine.Renderable;
+import io.github.stephenwelch.orbital.engine.Renderer;
 
 import java.util.List;
 
@@ -23,6 +24,28 @@ class Star implements Renderable {
     public void render(ShapeRenderer renderer) {
 //        Gdx.app.debug("STAR", "Rendering star at: " + position + " with radius: " + radius);
         renderer.circle(position.x, position.y, radius);
+    }
+
+    public boolean isOutOfScreenBounds() {
+        if((position.x > Renderer.CAMERA_WIDTH || position.x < 0) && (position.y > Renderer.CAMERA_HEIGHT || position.y < 0)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void moveIntoScreenBounds() {
+        if(position.x > Renderer.CAMERA_WIDTH) {
+            position.x = Renderer.CAMERA_WIDTH - position.x;
+        }
+        if(position.x < 0) {
+            position.x = Renderer.CAMERA_WIDTH + position.x;
+        }
+        if(position.y > Renderer.CAMERA_HEIGHT) {
+            position.y = Renderer.CAMERA_HEIGHT - position.y;
+        }
+        if(position.y < 0) {
+            position.y = Renderer.CAMERA_HEIGHT + position.y;
+        }
     }
 
     public String toString() {

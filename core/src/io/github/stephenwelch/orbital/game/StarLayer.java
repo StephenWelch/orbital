@@ -48,6 +48,12 @@ class StarLayer implements Renderable {
                 .collect(Collectors.toList());
     }
 
+    public void scroll(Vector2 translation) {
+//        translate(translation);
+
+        layer.stream().filter(Star::isOutOfScreenBounds).forEach(Star::moveIntoScreenBounds);
+    }
+
     @Override
     public void render(ShapeRenderer renderer) {
 
