@@ -13,7 +13,7 @@ import java.util.List;
 
 public class StarBackground implements GameEntity, Renderable {
 
-    private StarLayer backLayer = new StarLayer(1234)
+    private StarLayer backLayer = new StarLayer(Renderer.CAMERA_WIDTH, Renderer.CAMERA_HEIGHT, 1234)
             .setMinColor(Color.WHITE).setMaxColor(Color.WHITE)
             .setMinCount(1000).setMaxCount(1000)
             .setMinRadius(1f).setMaxRadius(1.5f);
