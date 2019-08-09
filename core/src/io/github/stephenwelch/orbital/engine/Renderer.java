@@ -45,6 +45,7 @@ public class Renderer implements GameEntity {
     private Array<Body> bodies = new Array<>();
 
     private boolean enableAntialiasing = false;
+    private boolean enableLighting = true;
 
     private Renderer(Renderable ... renderables) {
         setRenderList(renderables);
@@ -74,6 +75,9 @@ public class Renderer implements GameEntity {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
             camera.zoom = Math.min(5.5f, camera.zoom + zoomInc);
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            enableLighting = !enableLighting;
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
             if(bodyToFollow == null) {
@@ -111,8 +115,10 @@ public class Renderer implements GameEntity {
         }
         effectSpriteBatch.end();
 
-        rayHandler.setCombinedMatrix(camera);
-        rayHandler.updateAndRender();
+        if(enableLighting) {
+            rayHandler.setCombinedMatrix(camera);
+            rayHandler.updateAndRender();
+        }
     }
 
     @Override
@@ -165,6 +171,15 @@ public class Renderer implements GameEntity {
 
     public Renderer setAntialiasing(boolean enabled) {
         this.enableAntialiasing = enabled;
+        return this;
+    }
+
+    public boolean isEnableLighting() {
+        return enableLighting;
+    }
+
+    public Renderer setEnableLighting(boolean enableLighting) {
+        this.enableLighting = enableLighting;
         return this;
     }
 
