@@ -55,7 +55,7 @@ public class Renderer implements GameEntity {
     public void create() {
         rayHandler = new RayHandler(PhysicsManager.getInstance().getWorld());
         rayHandler.setShadows(true);
-        rayHandler.setAmbientLight(0.3f);
+        rayHandler.setAmbientLight(0.5f);
         rayHandler.setBlur(true);
         rayHandler.setBlurNum(1);
 
