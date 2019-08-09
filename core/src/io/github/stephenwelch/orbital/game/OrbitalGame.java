@@ -35,7 +35,7 @@ public class OrbitalGame extends ApplicationAdapter {
 
 		bg.create();
 
-		renderer.setAntialiasing(false);
+		renderer.setAntialiasing(true);
 		renderer.setRenderList(bg, planet, ship, physicsManager);
 
 		entities.add(renderer);

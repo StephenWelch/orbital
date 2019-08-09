@@ -24,10 +24,10 @@ public class Renderer implements GameEntity {
 
     private static Renderer instance = new Renderer();
 
-    public static final int CAMERA_WIDTH = 800;
-    public static final int CAMERA_HEIGHT = 600;
-    public static final int WINDOW_WIDTH = 800;
-    public static final int WINDOW_HEIGHT = 600;
+    public static final int CAMERA_WIDTH = 1920;
+    public static final int CAMERA_HEIGHT = 1080;
+    public static final int WINDOW_WIDTH = 1920;
+    public static final int WINDOW_HEIGHT = 1080;
     private static final Vector2 SCREEN_CENTER = new Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
     private OrthographicCamera camera = new OrthographicCamera();
