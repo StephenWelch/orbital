@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 class StarLayer implements GameEntity, Renderable {
+    private final float width, height;
     private float minRadius = 1.0f;
     private float maxRadius = 2.0f;
     private int minCount = 100;
@@ -23,7 +24,9 @@ class StarLayer implements GameEntity, Renderable {
     private float translationMultiplier = 0.5f;
     private final long seed;
 
-    public StarLayer(long seed) {
+    public StarLayer(int width, int height, long seed) {
+        this.width = width;
+        this.height = height;
         this.seed = seed;
     }
 
@@ -33,8 +36,8 @@ class StarLayer implements GameEntity, Renderable {
         int count = Util.getRandomNumber(minCount, maxCount, seed);
         Gdx.app.log("STAR_LAYER", String.format("Creating star layer with %s stars.", count));
         for(int index = 0; index < count; index++) {
-            float x = Util.getRandomNumber(0f, (float)Renderer.CAMERA_WIDTH, seed);
-            float y = Util.getRandomNumber(0f, (float)Renderer.CAMERA_HEIGHT, seed);
+            float x = Util.getRandomNumber(0f, width, seed);
+            float y = Util.getRandomNumber(0f, height, seed);
             float radius = Util.getRandomNumber(minRadius, maxRadius, seed);
             Color color = minColor.lerp(maxColor, Util.getRandomNumber(0f, 1f, seed));
             Star star = new Star(new Vector2(x, y), radius, color);
