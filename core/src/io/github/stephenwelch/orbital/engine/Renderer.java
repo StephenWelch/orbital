@@ -1,5 +1,6 @@
 package io.github.stephenwelch.orbital.engine;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -33,6 +34,7 @@ public class Renderer implements GameEntity {
     private OrthographicCamera camera = new OrthographicCamera();
     private Viewport viewport;
 
+    private RayHandler rayHandler;
     private ShapeRenderer renderer;
     private Renderable[] renderList = new Renderable[0];
 
@@ -50,6 +52,12 @@ public class Renderer implements GameEntity {
 
     @Override
     public void create() {
+        rayHandler = new RayHandler(PhysicsManager.getInstance().getWorld());
+        rayHandler.setShadows(false);
+        rayHandler.setAmbientLight(0.0f);
+        rayHandler.setBlur(true);
+//        rayHandler.setBlurNum(5);
+
         renderer = new ShapeRenderer();
         effectSpriteBatch = new SpriteBatch();
 
@@ -102,10 +110,14 @@ public class Renderer implements GameEntity {
             rendererEffect.render(effectSpriteBatch);
         }
         effectSpriteBatch.end();
+
+        rayHandler.setCombinedMatrix(camera);
+        rayHandler.updateAndRender();
     }
 
     @Override
     public void dispose() {
+        rayHandler.dispose();
         renderer.dispose();
         effectSpriteBatch.dispose();
     }
@@ -166,6 +178,10 @@ public class Renderer implements GameEntity {
 
     public Body getBodyToFollow() {
         return bodyToFollow;
+    }
+
+    public RayHandler getRayHandler() {
+        return rayHandler;
     }
 
     public boolean isInWindow(Vector2 position) {

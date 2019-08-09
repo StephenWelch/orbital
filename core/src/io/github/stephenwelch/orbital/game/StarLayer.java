@@ -1,10 +1,12 @@
 package io.github.stephenwelch.orbital.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import io.github.stephenwelch.orbital.Util;
+import io.github.stephenwelch.orbital.engine.GameEntity;
 import io.github.stephenwelch.orbital.engine.Renderable;
 import io.github.stephenwelch.orbital.engine.Renderer;
 
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class StarLayer implements Renderable {
+class StarLayer implements GameEntity, Renderable {
     private float minRadius = 1.0f;
     private float maxRadius = 2.0f;
     private int minCount = 100;
@@ -39,6 +41,17 @@ class StarLayer implements Renderable {
             layer.add(star);
 //            Gdx.app.debug("STAR_LAYER", String.format("Created star: %s", star));
         }
+        layer.forEach(GameEntity::create);
+    }
+
+    @Override
+    public void update() {
+        layer.forEach(GameEntity::update);
+    }
+
+    @Override
+    public void dispose() {
+        layer.forEach(GameEntity::dispose);
     }
 
     public void translate(Vector2 translation) {
