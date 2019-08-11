@@ -3,9 +3,12 @@ package io.github.stephenwelch.orbital.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import io.github.stephenwelch.orbital.engine.GameEntity;
+import io.github.stephenwelch.orbital.engine.GameModule;
 import io.github.stephenwelch.orbital.engine.physics.PhysicsManager;
 import io.github.stephenwelch.orbital.engine.renderer.Renderer;
+import io.github.stephenwelch.orbital.game.entity.Planet;
+import io.github.stephenwelch.orbital.game.entity.Ship;
+import io.github.stephenwelch.orbital.game.entity.star.StarBackground;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +16,7 @@ import java.util.List;
 public class OrbitalGame extends ApplicationAdapter {
 
 	// Game setup
-	private List<GameEntity> entities = new ArrayList<>();
+	private List<GameModule> entities = new ArrayList<>();
 	private Renderer renderer = Renderer.getInstance();
 	private PhysicsManager physicsManager = PhysicsManager.getInstance();
 	private Ship ship = new Ship();
@@ -40,13 +43,13 @@ public class OrbitalGame extends ApplicationAdapter {
 		entities.add(planet);
 		entities.add(bg);
 
-		entities.forEach(GameEntity::create);
+		entities.forEach(GameModule::create);
 	}
 
 	@Override
 	public void render () {
 //		Gdx.app.log("UPDATE", "Rendering Orbital");
-		entities.forEach(GameEntity::update);
+		entities.forEach(GameModule::update);
 	}
 
 	@Override
@@ -58,6 +61,6 @@ public class OrbitalGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		Gdx.app.log("SHUTDOWN", "Shutting down Orbital");
-		entities.forEach(GameEntity::dispose);
+		entities.forEach(GameModule::dispose);
 	}
 }

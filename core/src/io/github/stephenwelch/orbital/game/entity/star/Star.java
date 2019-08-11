@@ -1,16 +1,16 @@
-package io.github.stephenwelch.orbital.game;
+package io.github.stephenwelch.orbital.game.entity.star;
 
 import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import io.github.stephenwelch.orbital.engine.GameEntity;
+import io.github.stephenwelch.orbital.engine.GameModule;
 import io.github.stephenwelch.orbital.engine.renderer.Renderable;
 import io.github.stephenwelch.orbital.engine.renderer.Renderer;
 
 import java.util.List;
 
-class Star implements GameEntity, Renderable {
+class Star implements GameModule, Renderable {
 
     private PointLight light;
     private Color color;

@@ -15,13 +15,13 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.stephenwelch.orbital.Util;
-import io.github.stephenwelch.orbital.engine.GameEntity;
+import io.github.stephenwelch.orbital.engine.GameModule;
 import io.github.stephenwelch.orbital.engine.physics.PhysicsManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Renderer implements GameEntity {
+public class Renderer implements GameModule {
 
     private static Renderer instance = new Renderer();
 
