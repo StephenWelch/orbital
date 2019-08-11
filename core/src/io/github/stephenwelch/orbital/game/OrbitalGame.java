@@ -3,11 +3,9 @@ package io.github.stephenwelch.orbital.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import io.github.stephenwelch.orbital.engine.GameEntity;
-import io.github.stephenwelch.orbital.engine.ParticleEffectsDefCreator;
-import io.github.stephenwelch.orbital.engine.PhysicsManager;
-import io.github.stephenwelch.orbital.engine.Renderer;
+import io.github.stephenwelch.orbital.engine.physics.PhysicsManager;
+import io.github.stephenwelch.orbital.engine.renderer.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;

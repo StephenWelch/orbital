@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import io.github.stephenwelch.orbital.Util;
 import io.github.stephenwelch.orbital.engine.GameEntity;
-import io.github.stephenwelch.orbital.engine.Renderable;
-import io.github.stephenwelch.orbital.engine.Renderer;
+import io.github.stephenwelch.orbital.engine.renderer.Renderable;
+import io.github.stephenwelch.orbital.engine.renderer.Renderer;
 
 import java.util.Arrays;
 import java.util.List;

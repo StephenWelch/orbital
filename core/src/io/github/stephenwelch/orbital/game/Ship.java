@@ -11,6 +11,12 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.google.gson.reflect.TypeToken;
 import io.github.stephenwelch.orbital.Util;
 import io.github.stephenwelch.orbital.engine.*;
+import io.github.stephenwelch.orbital.engine.physics.GravitationalBody;
+import io.github.stephenwelch.orbital.engine.physics.PhysicsManager;
+import io.github.stephenwelch.orbital.engine.renderer.ParticleEffectsDef;
+import io.github.stephenwelch.orbital.engine.renderer.Renderable;
+import io.github.stephenwelch.orbital.engine.renderer.Renderer;
+import io.github.stephenwelch.orbital.engine.renderer.RendererEffect;
 
 import java.util.List;
 

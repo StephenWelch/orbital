@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import io.github.stephenwelch.orbital.engine.*;
+import io.github.stephenwelch.orbital.engine.physics.GravitationalBody;
+import io.github.stephenwelch.orbital.engine.physics.PhysicsManager;
+import io.github.stephenwelch.orbital.engine.renderer.Renderable;
+import io.github.stephenwelch.orbital.engine.renderer.Renderer;
 
 import java.util.List;
 

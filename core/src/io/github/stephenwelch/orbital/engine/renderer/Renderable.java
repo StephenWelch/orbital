@@ -1,4 +1,4 @@
-package io.github.stephenwelch.orbital.engine;
+package io.github.stephenwelch.orbital.engine.renderer;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
