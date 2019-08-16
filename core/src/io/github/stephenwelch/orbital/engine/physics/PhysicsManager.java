@@ -1,4 +1,4 @@
-package io.github.stephenwelch.orbital.engine;
+package io.github.stephenwelch.orbital.engine.physics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,11 +11,15 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import io.github.stephenwelch.orbital.engine.GameModule;
+import io.github.stephenwelch.orbital.engine.renderer.Renderable;
+import io.github.stephenwelch.orbital.engine.renderer.RenderableVector2;
+import io.github.stephenwelch.orbital.engine.renderer.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhysicsManager implements GameEntity, Renderable {
+public class PhysicsManager implements GameModule, Renderable {
 
     private static PhysicsManager instance = new PhysicsManager();
     public static final float G = (float)6.674E-11;

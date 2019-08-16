@@ -1,4 +1,4 @@
-package io.github.stephenwelch.orbital.engine;
+package io.github.stephenwelch.orbital.engine.physics;
 
 import com.badlogic.gdx.physics.box2d.Body;
 
