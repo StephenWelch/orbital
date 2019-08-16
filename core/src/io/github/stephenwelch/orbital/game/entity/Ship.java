@@ -1,4 +1,4 @@
-package io.github.stephenwelch.orbital.game;
+package io.github.stephenwelch.orbital.game.entity;
 
 import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
@@ -11,10 +11,16 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.google.gson.reflect.TypeToken;
 import io.github.stephenwelch.orbital.Util;
 import io.github.stephenwelch.orbital.engine.*;
+import io.github.stephenwelch.orbital.engine.physics.GravitationalBody;
+import io.github.stephenwelch.orbital.engine.physics.PhysicsManager;
+import io.github.stephenwelch.orbital.engine.renderer.ParticleEffectsDef;
+import io.github.stephenwelch.orbital.engine.renderer.Renderable;
+import io.github.stephenwelch.orbital.engine.renderer.Renderer;
+import io.github.stephenwelch.orbital.engine.renderer.RendererEffect;
 
 import java.util.List;
 
-public class Ship implements Renderable, GameEntity, GravitationalBody {
+public class Ship implements Renderable, GameModule, GravitationalBody {
 
     private final Vector2[] vertices = new Vector2[] {
             new Vector2(0.0f, 5.9475f),

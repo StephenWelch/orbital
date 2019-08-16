@@ -1,20 +1,19 @@
-package io.github.stephenwelch.orbital.game;
+package io.github.stephenwelch.orbital.game.entity.star;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import io.github.stephenwelch.orbital.Util;
-import io.github.stephenwelch.orbital.engine.GameEntity;
-import io.github.stephenwelch.orbital.engine.Renderable;
-import io.github.stephenwelch.orbital.engine.Renderer;
+import io.github.stephenwelch.orbital.engine.GameModule;
+import io.github.stephenwelch.orbital.engine.renderer.Renderable;
+import io.github.stephenwelch.orbital.engine.renderer.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class StarLayer implements GameEntity, Renderable {
+class StarLayer implements GameModule, Renderable {
     private final float width, height;
     private float minRadius = 1.0f;
     private float maxRadius = 2.0f;
@@ -44,17 +43,17 @@ class StarLayer implements GameEntity, Renderable {
             layer.add(star);
 //            Gdx.app.debug("STAR_LAYER", String.format("Created star: %s", star));
         }
-        layer.forEach(GameEntity::create);
+        layer.forEach(GameModule::create);
     }
 
     @Override
     public void update() {
-        layer.forEach(GameEntity::update);
+        layer.forEach(GameModule::update);
     }
 
     @Override
     public void dispose() {
-        layer.forEach(GameEntity::dispose);
+        layer.forEach(GameModule::dispose);
     }
 
     public void translate(Vector2 translation) {

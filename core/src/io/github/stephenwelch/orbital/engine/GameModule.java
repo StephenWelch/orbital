@@ -1,6 +1,6 @@
 package io.github.stephenwelch.orbital.engine;
 
-public interface GameEntity {
+public interface GameModule {
 
     void create();
     void update();

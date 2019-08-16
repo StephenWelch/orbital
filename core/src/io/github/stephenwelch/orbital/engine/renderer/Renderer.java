@@ -1,11 +1,10 @@
-package io.github.stephenwelch.orbital.engine;
+package io.github.stephenwelch.orbital.engine.renderer;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,12 +15,13 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.stephenwelch.orbital.Util;
+import io.github.stephenwelch.orbital.engine.GameModule;
+import io.github.stephenwelch.orbital.engine.physics.PhysicsManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class Renderer implements GameEntity {
+public class Renderer implements GameModule {
 
     private static Renderer instance = new Renderer();
 

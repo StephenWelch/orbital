@@ -1,14 +1,18 @@
-package io.github.stephenwelch.orbital.game;
+package io.github.stephenwelch.orbital.game.entity;
 
 import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import io.github.stephenwelch.orbital.engine.*;
+import io.github.stephenwelch.orbital.engine.physics.GravitationalBody;
+import io.github.stephenwelch.orbital.engine.physics.PhysicsManager;
+import io.github.stephenwelch.orbital.engine.renderer.Renderable;
+import io.github.stephenwelch.orbital.engine.renderer.Renderer;
 
 import java.util.List;
 
-public class Planet implements Renderable, GameEntity, GravitationalBody {
+public class Planet implements Renderable, GameModule, GravitationalBody {
 
     private final float radius;
     private final float mass;

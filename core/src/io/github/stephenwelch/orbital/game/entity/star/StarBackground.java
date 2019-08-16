@@ -1,17 +1,17 @@
-package io.github.stephenwelch.orbital.game;
+package io.github.stephenwelch.orbital.game.entity.star;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import io.github.stephenwelch.orbital.Util;
-import io.github.stephenwelch.orbital.engine.GameEntity;
-import io.github.stephenwelch.orbital.engine.Renderable;
-import io.github.stephenwelch.orbital.engine.Renderer;
+import io.github.stephenwelch.orbital.engine.GameModule;
+import io.github.stephenwelch.orbital.engine.renderer.Renderable;
+import io.github.stephenwelch.orbital.engine.renderer.Renderer;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class StarBackground implements GameEntity, Renderable {
+public class StarBackground implements GameModule, Renderable {
 
     private StarLayer backLayer = new StarLayer(Renderer.CAMERA_WIDTH, Renderer.CAMERA_HEIGHT, 1234)
             .setMinColor(Color.WHITE).setMaxColor(Color.WHITE)
@@ -23,7 +23,7 @@ public class StarBackground implements GameEntity, Renderable {
     private Vector2 lastPosition = new Vector2();
 
     public void create() {
-        layers.forEach(GameEntity::create);
+        layers.forEach(GameModule::create);
         lastPosition = getCameraPosition();
     }
 
@@ -34,14 +34,14 @@ public class StarBackground implements GameEntity, Renderable {
         layers.forEach(l -> l.translate(delta));
         layers.forEach(l -> l.scroll(delta));
 
-        layers.forEach(GameEntity::update);
+        layers.forEach(GameModule::update);
 
         lastPosition = currentPosition;
     }
 
     @Override
     public void dispose() {
-        layers.forEach(GameEntity::dispose);
+        layers.forEach(GameModule::dispose);
     }
 
     @Override
