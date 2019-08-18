@@ -78,18 +78,6 @@ public class ParticleEffectsDef<E extends Enum> {
         return effect;
     }
 
-    public void saveToJson(FileHandle fileHandle) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(this);
-        try(Writer jsonWriter = fileHandle.writer(false)) {
-            jsonWriter.append(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            Gdx.app.log("PARTICLE_EFFECT_DEF", "Saved configuration file.");
-        }
-    }
-
     public void registerAll() {
         particleNameEffectMap.forEach((particleName, effect) -> {
             Renderer.getInstance().registerParticleEffect(effect);
