@@ -1,19 +1,19 @@
 {
   "keyMap": {
     "MAIN_ENGINE": {
-      "key": "Up",
+      "key": "W",
       "activationType": "WHILE_PRESSED"
     },
     "LEFT_THRUSTER": {
-      "key": "Left",
+      "key": "A",
       "activationType": "WHILE_PRESSED"
     },
     "RIGHT_THRUSTER": {
-      "key": "Right",
+      "key": "D",
       "activationType": "WHILE_PRESSED"
     },
     "RETRO_THRUSTER": {
-      "key": "Down",
+      "key": "S",
       "activationType": "WHILE_PRESSED"
     }
   }
