@@ -69,7 +69,13 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
 
         shape.dispose();
 
-        particleEffects = Util.loadFromJson(Gdx.files.internal("particles/ship.ppm"), new TypeToken<ParticleEffectsDef<ShipParticleEffects>>() {});
+        PhysicsManager.getInstance().registerGravitationalBody(this);
+
+        // Rendering
+        rightLight = new PointLight(Renderer.getInstance().getRayHandler(), 128, Color.RED, 5f, 0f, 0f);
+        leftLight = new PointLight(Renderer.getInstance().getRayHandler(), 128, Color.GREEN, 5f, 0f, 0f);
+
+        particleEffects = Util.loadFromJson(Gdx.files.internal("renderdef/ship.pdf"), new TypeToken<ParticleEffectsDef<ShipParticleEffects>>() {});
         particleEffects.create();
         particleEffects.registerAll();
 

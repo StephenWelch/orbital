@@ -108,7 +108,7 @@ public class Renderer implements GameModule {
             render(r);
         }
         if(bodyToFollow != null) {
-            render(new RenderableBody(bodyToFollow, renderer));
+            render(new RenderableDebugBody(bodyToFollow, renderer));
         }
 
         effectSpriteBatch.setProjectionMatrix(camera.combined);

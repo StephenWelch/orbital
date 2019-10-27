@@ -31,8 +31,6 @@ public class Util {
         // 8192 is the default buffer size, anyway
         try(BufferedReader jsonReader = fileHandle.reader(8192)) {
             file = jsonReader.lines().collect(Collectors.joining());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,7 +57,13 @@ public class Util {
         saveToFile(fileHandle, json, false);
     }
 
-    public static <T> T loadFromJson(FileHandle fileHandle, TypeToken type) {
+    public static <T> void saveToJson(FileHandle fileHandle, T object, TypeToken<T> typeToken) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(object, typeToken.getType());
+        saveToFile(fileHandle, json, false);
+    }
+
+    public static <T> T loadFromJson(FileHandle fileHandle, TypeToken<T> type) {
         Gson gson = new Gson();
         String json = Util.loadFromFile(fileHandle);
         return gson.fromJson(json, type.getType());

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Provides a way to render debug information per-body using code from Box2DDebugRenderer.
  */
-public class RenderableBody implements Renderable {
+public class RenderableDebugBody implements Renderable {
 
     private final ShapeRenderer renderer;
     private final Body body;
@@ -23,7 +23,7 @@ public class RenderableBody implements Renderable {
     private final static Vector2 lower = new Vector2();
     private final static Vector2 upper = new Vector2();
 
-    public RenderableBody(Body body, ShapeRenderer renderer) {
+    public RenderableDebugBody(Body body, ShapeRenderer renderer) {
         this.body = body;
         this.renderer = renderer;
         // initialize vertices array
@@ -53,7 +53,7 @@ public class RenderableBody implements Renderable {
         return color;
     }
 
-    public RenderableBody setColor(Color color) {
+    public RenderableDebugBody setColor(Color color) {
         this.color = color;
         return this;
     }
@@ -62,7 +62,7 @@ public class RenderableBody implements Renderable {
         return renderAABB;
     }
 
-    public RenderableBody setRenderAABB(boolean renderAABB) {
+    public RenderableDebugBody setRenderAABB(boolean renderAABB) {
         this.renderAABB = renderAABB;
         return this;
     }
@@ -71,7 +71,7 @@ public class RenderableBody implements Renderable {
         return renderShape;
     }
 
-    public RenderableBody setRenderShape(boolean renderShape) {
+    public RenderableDebugBody setRenderShape(boolean renderShape) {
         this.renderShape = renderShape;
         return this;
     }
