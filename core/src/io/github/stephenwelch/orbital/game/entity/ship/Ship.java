@@ -18,9 +18,12 @@ import io.github.stephenwelch.orbital.engine.renderer.Renderable;
 import io.github.stephenwelch.orbital.engine.renderer.Renderer;
 import io.github.stephenwelch.orbital.engine.renderer.RendererEffect;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ship implements Renderable, GameModule, GravitationalBody {
+
+    private List<ShipItem> inventory;
 
     private final Vector2[] vertices = new Vector2[] {
             new Vector2(0.0f, 5.9475f),
@@ -46,8 +49,13 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
     @Override
     public void create() {
 
-        rightLight = new PointLight(Renderer.getInstance().getRayHandler(), 128, Color.RED, 5f, 0f, 0f);
-        leftLight = new PointLight(Renderer.getInstance().getRayHandler(), 128, Color.GREEN, 5f, 0f, 0f);
+        // Internal
+        inventory = new ArrayList<>();
+        inventory.forEach(ShipItem::create);
+
+        // Physics
+        PolygonShape shape = new PolygonShape();
+        shape.set(vertices);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -55,9 +63,6 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
         bodyDef.angle = 0.0f;
 
         body = PhysicsManager.getInstance().getWorld().createBody(bodyDef);
-
-        PolygonShape shape = new PolygonShape();
-        shape.set(vertices);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -69,15 +74,21 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
 
         shape.dispose();
 
-        particleEffects = Util.loadFromJson(Gdx.files.internal("particles/ship.ppm"), new TypeToken<ParticleEffectsDef<ShipParticleEffects>>() {});
+        PhysicsManager.getInstance().registerGravitationalBody(this);
+
+        // Rendering
+        rightLight = new PointLight(Renderer.getInstance().getRayHandler(), 128, Color.RED, 5f, 0f, 0f);
+        leftLight = new PointLight(Renderer.getInstance().getRayHandler(), 128, Color.GREEN, 5f, 0f, 0f);
+
+        particleEffects = Util.loadFromJson(Gdx.files.internal("renderdef/ship.pdf"), new TypeToken<ParticleEffectsDef<ShipParticleEffects>>() {});
         particleEffects.create();
         particleEffects.registerAll();
-
-        PhysicsManager.getInstance().registerGravitationalBody(this);
     }
 
     @Override
     public void update() {
+        inventory.forEach(ShipItem::update);
+
         float torque = 800.0f;
         float force = 2000.0f;
         if(ShipKeyMap.getInstance().getKey(ShipKeyFunctions.LEFT_THRUSTER)) {
@@ -132,7 +143,7 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
 
     @Override
     public void dispose() {
-
+        inventory.forEach(ShipItem::dispose);
     }
 
     @Override
@@ -141,6 +152,10 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
 //        Gdx.app.debug("SHIP", "Position: " + body.getPosition() + "\tAngle: " + body.getAngle());
         Vector2[] translatedVertices = getVertexPositions();
         renderer.triangle(translatedVertices[0].x, translatedVertices[0].y, translatedVertices[1].x, translatedVertices[1].y, translatedVertices[2].x, translatedVertices[2].y);
+    }
+
+    public void addItem(ShipItem item) {
+
     }
 
     @Override
