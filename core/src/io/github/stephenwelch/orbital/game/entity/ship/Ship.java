@@ -1,4 +1,4 @@
-package io.github.stephenwelch.orbital.game.entity;
+package io.github.stephenwelch.orbital.game.entity.ship;
 
 import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
@@ -80,7 +80,7 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
     public void update() {
         float torque = 800.0f;
         float force = 2000.0f;
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if(ShipKeyMap.getInstance().getKey(ShipKeyFunctions.LEFT_THRUSTER)) {
             body.applyTorque(torque, true);
 
             RendererEffect rightForward = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.RIGHT_FORWARD_THRUSTER, getTranslationRotation());
@@ -92,7 +92,7 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
             particleEffects.getEffect(ShipParticleEffects.RIGHT_FORWARD_THRUSTER).stop();
             particleEffects.getEffect(ShipParticleEffects.LEFT_BACK_THRUSTER).stop();
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if(ShipKeyMap.getInstance().getKey(ShipKeyFunctions.RIGHT_THRUSTER)) {
             body.applyTorque(-torque, true);
 
             RendererEffect leftForward = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.LEFT_FORWARD_THRUSTER, getTranslationRotation());
@@ -104,7 +104,7 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
             particleEffects.getEffect(ShipParticleEffects.LEFT_FORWARD_THRUSTER).stop();
             particleEffects.getEffect(ShipParticleEffects.RIGHT_BACK_THRUSTER).stop();
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if(ShipKeyMap.getInstance().getKey(ShipKeyFunctions.MAIN_ENGINE)) {
             body.applyForceToCenter(force * (float)Math.cos(body.getAngle()), force * (float)Math.sin(body.getAngle()), true);
 
             RendererEffect mainEngineThrust = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.MAIN_ENGINE, getTranslationRotation());
@@ -112,7 +112,7 @@ public class Ship implements Renderable, GameModule, GravitationalBody {
         } else {
             particleEffects.getEffect(ShipParticleEffects.MAIN_ENGINE).stop();
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if(ShipKeyMap.getInstance().getKey(ShipKeyFunctions.RETRO_THRUSTER)) {
             body.applyForceToCenter(-force * (float)Math.cos(body.getAngle()), -force * (float)Math.sin(body.getAngle()), true);
 
             RendererEffect leftRetro = particleEffects.getEffectWithAdjustedPosition(ShipParticleEffects.LEFT_RETRO, getTranslationRotation());

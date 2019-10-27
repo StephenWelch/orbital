@@ -1,9 +1,11 @@
 package io.github.stephenwelch.orbital;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
@@ -35,6 +37,26 @@ public class Util {
             e.printStackTrace();
         }
         return file;
+    }
+
+    public static void saveToFile(FileHandle fileHandle, String contents, boolean append) {
+        try(Writer writer = fileHandle.writer(false)) {
+            if(append) {
+                writer.append(contents);
+            } else {
+                writer.write(contents);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            Gdx.app.log("Util", String.format("Wrote to file: %s", fileHandle.file().getAbsolutePath()));
+        }
+    }
+
+    public static <T> void saveToJson(FileHandle fileHandle, T object) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(object);
+        saveToFile(fileHandle, json, false);
     }
 
     public static <T> T loadFromJson(FileHandle fileHandle, TypeToken type) {

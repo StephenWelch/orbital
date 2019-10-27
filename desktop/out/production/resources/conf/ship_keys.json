@@ -1,0 +1,20 @@
+{
+  "keyMap": {
+    "MAIN_ENGINE": {
+      "key": "W",
+      "activationType": "WHILE_PRESSED"
+    },
+    "LEFT_THRUSTER": {
+      "key": "A",
+      "activationType": "WHILE_PRESSED"
+    },
+    "RIGHT_THRUSTER": {
+      "key": "D",
+      "activationType": "WHILE_PRESSED"
+    },
+    "RETRO_THRUSTER": {
+      "key": "S",
+      "activationType": "WHILE_PRESSED"
+    }
+  }
+}
